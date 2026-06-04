@@ -1,0 +1,22 @@
+# Create .gitignore to exclude sensitive/unnecessary files
+cat > .gitignore << 'EOF'
+# Python / Backend
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/*.pyc
+backend/.env
+backend/*.db
+backend/*.sqlite3
+
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# OS
+.DS_Store
+Thumbs.db
+EOF
+.vercel
+.env*.local
