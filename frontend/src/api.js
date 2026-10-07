@@ -1,224 +1,108 @@
 /**
  * src/api.js
- *
- * Centralised data layer for Next Tech Solutions.
- *
- * In development / production these functions try to fetch from the
- * Vite-proxied backend (/api/*).  If the backend is unavailable they
- * fall back to the inline data below so the UI always renders.
- *
- * To switch to live API calls only, remove the catch-fallbacks.
+ * Centralised data layer for Axon Forge.
+ * Fetches content from Strapi CMS.
+ * Falls back to FastAPI for contact form (SMTP).
  */
 
 import axios from 'axios'
 
-const api = axios.create({ baseURL: '/' })
+const STRAPI_URL  = import.meta.env.VITE_STRAPI_API_URL || 'http://localhost:1337'
+const FASTAPI_URL = import.meta.env.VITE_API_URL        || 'http://localhost:8000'
 
-/* ─── Inline fallback data ──────────────────────────────────────── */
+const strapi = axios.create({ baseURL: STRAPI_URL })
 
-const SERVICES_DATA = [
-  {
-    id: 1,
-    icon: '🤖',
-    title: 'AI & ML Solutions',
-    description:
-      'Custom LLM integrations, RAG systems, computer vision, and intelligent automation pipelines that transform your business workflows.',
-    features: ['LLM Fine-tuning', 'RAG Systems', 'Computer Vision', 'AI Chatbots', 'ML Pipelines'],
-  },
-  {
-    id: 2,
-    icon: '⚡',
-    title: 'SaaS Development',
-    description:
-      'Full-cycle SaaS platforms with multi-tenant architecture, subscription billing, analytics dashboards, and scalable cloud infrastructure.',
-    features: ['Multi-tenant Architecture', 'Stripe Integration', 'Admin Dashboards', 'User Auth', 'Analytics'],
-  },
-  {
-    id: 3,
-    icon: '🌐',
-    title: 'Web Development',
-    description:
-      'Pixel-perfect, high-performance web applications using React, Next.js, and modern frontend tooling with exceptional UX.',
-    features: ['React / Next.js', 'TypeScript', 'Responsive Design', 'SEO Optimized', 'Performance First'],
-  },
-  {
-    id: 4,
-    icon: '📱',
-    title: 'Mobile Development',
-    description:
-      'Cross-platform mobile apps with React Native & Expo — one codebase for iOS and Android with native performance.',
-    features: ['React Native', 'Expo', 'Push Notifications', 'Offline Support', 'App Store Deploy'],
-  },
-  {
-    id: 5,
-    icon: '☁️',
-    title: 'Cloud & DevOps',
-    description:
-      'AWS & GCP infrastructure setup, Docker containerization, Kubernetes orchestration, and fully automated CI/CD pipelines.',
-    features: ['AWS / GCP', 'Docker & K8s', 'CI/CD Pipelines', 'Auto Scaling', 'Cost Optimization'],
-  },
-  {
-    id: 6,
-    icon: '🗄️',
-    title: 'Database Design',
-    description:
-      'Scalable database architecture, query optimization, migrations, and real-time data solutions for high-traffic applications.',
-    features: ['PostgreSQL / MySQL', 'Redis Caching', 'Schema Design', 'Query Optimization', 'Migrations'],
-  },
-]
+/* ─── Helpers ────────────────────────────────────────────────────── */
 
-const STATS_DATA = {
-  projects_completed: 85,
-  happy_clients: 60,
-  years_experience: 5,
-  technologies: 30,
+/**
+ * Strapi v5 returns: { data: [ { id, ...attributes } ] }  (flattened in v5)
+ * Strapi v4 returns: { data: [ { id, attributes: {...} } ] }
+ * This helper normalises both into a flat object.
+ */
+function normalise(item) {
+  if (!item) return null
+  const attrs = item.attributes ? item.attributes : item
+  return { id: item.id, ...attrs }
 }
 
-const TESTIMONIALS_DATA = [
-  {
-    id: 1,
-    avatar: 'JD',
-    name: 'James Davis',
-    role: 'CTO',
-    company: 'TechFlow Inc.',
-    rating: 5,
-    text: 'Next Tech automated our entire data pipeline. What used to take 3 days now runs in minutes. The ROI was visible in week one — we renewed immediately.',
-  },
-  {
-    id: 2,
-    avatar: 'SK',
-    name: 'Sarah Kim',
-    role: 'Founder',
-    company: 'LaunchPad SaaS',
-    rating: 5,
-    text: 'They built our entire SaaS MVP in 6 weeks — clean code, great architecture, and they genuinely cared about our product. We raised our seed round shortly after.',
-  },
-  {
-    id: 3,
-    avatar: 'RM',
-    name: 'Raza Malik',
-    role: 'Product Manager',
-    company: 'FinEdge Solutions',
-    rating: 5,
-    text: 'The AI chatbot they built handles 80% of our customer queries automatically. Incredible quality, on-time delivery, and the documentation was outstanding.',
-  },
-  {
-    id: 4,
-    avatar: 'AL',
-    name: 'Amanda Lee',
-    role: 'CEO',
-    company: 'EduTech Global',
-    rating: 5,
-    text: 'Professional, communicative, and technically excellent. Our platform scaled from 100 to 10,000 users without a single outage. Truly a 10/10 experience.',
-  },
-  {
-    id: 5,
-    avatar: 'TH',
-    name: 'Thomas Hughes',
-    role: 'Engineering Lead',
-    company: 'ShipFast Logistics',
-    rating: 5,
-    text: 'The React Native app they delivered is beautiful and performant. Our driver app has a 4.9★ App Store rating. We continue to work with them for new features.',
-  },
-  {
-    id: 6,
-    avatar: 'FO',
-    name: 'Fatima Omar',
-    role: 'Co-Founder',
-    company: 'MedAI Labs',
-    rating: 5,
-    text: 'The LLM fine-tuning work they did on our medical dataset was world-class. They understood our compliance requirements and delivered exactly what we needed.',
-  },
-]
+/** Build a full media URL from a Strapi media object */
+function mediaUrl(media) {
+  if (!media) return null
+  // Strapi v4: media.data.attributes.url
+  // Strapi v5: media.url
+  const url = media?.data?.attributes?.url || media?.url
+  return url ? `${STRAPI_URL}${url}` : null
+}
 
-const TEAM_DATA = [
-  {
-    id: 1,
-    avatar: 'MA',
-    name: 'Mumtaz Ali',
-    role: 'Founder & Full-Stack Engineer',
-    bio: 'Django & FastAPI expert with 5+ years building scalable SaaS platforms. Passionate about AI integration and clean architecture that stands the test of time.',
-    skills: ['Python', 'FastAPI', 'Django', 'React', 'AWS', 'PostgreSQL', 'LangChain'],
-    linkedin: 'https://linkedin.com/in/nexttech-sol',
-    github: 'https://github.com/engrmumtazali0112',
-  },
-  {
-    id: 2,
-    avatar: 'AI',
-    name: 'AI Engineer',
-    role: 'Machine Learning Engineer',
-    bio: 'Specialized in LLM fine-tuning, RAG pipelines, and computer vision systems. Turning state-of-the-art research into production-ready AI products.',
-    skills: ['OpenAI', 'LangChain', 'TensorFlow', 'HuggingFace', 'Pinecone', 'Python', 'FastAPI'],
-    linkedin: 'https://linkedin.com/in/nexttech-sol',
-    github: 'https://github.com/engrmumtazali0112',
-  },
-  {
-    id: 3,
-    avatar: 'FE',
-    name: 'Frontend Lead',
-    role: 'React & UI/UX Engineer',
-    bio: 'Crafting pixel-perfect, blazing-fast interfaces with React and Next.js. Obsessed with micro-animations, accessibility, and developer experience.',
-    skills: ['React', 'Next.js', 'TypeScript', 'Tailwind', 'Framer Motion', 'Vite', 'CSS'],
-    linkedin: 'https://linkedin.com/in/nexttech-sol',
-    github: 'https://github.com/engrmumtazali0112',
-  },
-  {
-    id: 4,
-    avatar: 'DO',
-    name: 'DevOps Engineer',
-    role: 'Cloud & Infrastructure Lead',
-    bio: 'AWS-certified engineer who lives and breathes Docker, Kubernetes, and zero-downtime deployments. Keeping production stable at any scale.',
-    skills: ['AWS', 'GCP', 'Docker', 'Kubernetes', 'Terraform', 'GitHub Actions', 'Nginx'],
-    linkedin: 'https://linkedin.com/in/nexttech-sol',
-    github: 'https://github.com/engrmumtazali0112',
-  },
-]
+/* ─── Exported API functions ────────────────────────────────────── */
 
-/* ─── Exported API functions ─────────────────────────────────────── */
-
-/** Fetch all services — falls back to inline data if backend is down */
+/** Fetch all active services */
 export async function getServices() {
   try {
-    const res = await api.get('/api/services')
-    return res
-  } catch {
-    return { data: { services: SERVICES_DATA } }
+    const res  = await strapi.get('/api/services?populate=*&filters[is_active][$eq]=true&sort=order_index:asc')
+    const list = res.data.data.map(item => {
+      const flat = normalise(item)
+      return {
+        ...flat,
+        photo_url: mediaUrl(flat.photo_url),
+        features:  Array.isArray(flat.features) ? flat.features : [],
+      }
+    })
+    return { data: { services: list } }
+  } catch (err) {
+    console.error('getServices error:', err)
+    return { data: { services: [] } }
   }
 }
 
-/** Fetch site-wide stats — falls back to inline data if backend is down */
+/** Fetch site-wide stats (Single Type) */
 export async function getStats() {
   try {
-    const res = await api.get('/api/stats')
-    return res
-  } catch {
-    return { data: STATS_DATA }
+    const res = await strapi.get('/api/stats?populate=*')
+    const raw = res.data.data
+    // Single Type can return { id, attributes } or a flat object
+    const flat = raw?.attributes ? raw.attributes : raw
+    return { data: flat || {} }
+  } catch (err) {
+    console.error('getStats error:', err)
+    return { data: {} }
   }
 }
 
-/** Fetch testimonials — falls back to inline data if backend is down */
+/** Fetch testimonials */
 export async function getTestimonials() {
   try {
-    const res = await api.get('/api/testimonials')
-    return res
-  } catch {
-    return { data: { testimonials: TESTIMONIALS_DATA } }
+    const res  = await strapi.get('/api/testimonials?populate=*&sort=createdAt:desc')
+    const list = res.data.data.map(item => normalise(item))
+    return { data: { testimonials: list } }
+  } catch (err) {
+    console.error('getTestimonials error:', err)
+    return { data: { testimonials: [] } }
   }
 }
 
-/** Fetch team members — falls back to inline data if backend is down */
+/** Fetch team members */
 export async function getTeam() {
   try {
-    const res = await api.get('/api/team')
-    return res
-  } catch {
-    return { data: { team: TEAM_DATA } }
+    const res  = await strapi.get('/api/team-members?populate=*&sort=order_index:asc')
+    const list = res.data.data.map(item => {
+      const flat = normalise(item)
+      return {
+        ...flat,
+        avatar: flat.avatar || flat.name?.slice(0, 2).toUpperCase(),
+        skills: Array.isArray(flat.skills) ? flat.skills : [],
+      }
+    })
+    return { data: { team: list } }
+  } catch (err) {
+    console.error('getTeam error:', err)
+    return { data: { team: [] } }
   }
 }
 
-/** Submit contact form */
+/** Submit contact form → FastAPI (handles SMTP email) */
 export async function submitContact(formData) {
-  return api.post('/api/contact', formData)
+  return axios.post(`${FASTAPI_URL}/api/contact`, formData)
 }
 
-export default api
+export default strapi

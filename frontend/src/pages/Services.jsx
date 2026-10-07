@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
+import { getServices } from '../api'
 import styles from './Services.module.css'
-
-const API = 'http://localhost:8000'
 
 export default function Services() {
   const [services, setServices] = useState([])
@@ -11,16 +10,14 @@ export default function Services() {
   const [error,    setError]    = useState(false)
 
   useEffect(() => {
-    fetch(`${API}/api/services?active_only=true`)
-      .then(r => r.json())
-      .then(d => setServices(d.services || []))
+    getServices()
+      .then(r => setServices(r.data.services || []))
       .catch(() => setError(true))
       .finally(() => setLoading(false))
   }, [])
 
   return (
     <div>
-
       {/* ── Hero ── */}
       <section className={styles.hero}>
         <div className={styles.heroBg} />
@@ -66,13 +63,13 @@ export default function Services() {
 
           {error && !loading && (
             <div className={styles.errorBox}>
-              <p>⚠️ Could not load services. Make sure the backend is running.</p>
+              <p>⚠️ Could not load services. Please try again later.</p>
             </div>
           )}
 
           {!loading && !error && services.length === 0 && (
             <div className={styles.emptyBox}>
-              <p>No services added yet. <Link to="/admin/services" className={styles.goldLink}>Add your first service →</Link></p>
+              <p>No services added yet. Check back soon.</p>
             </div>
           )}
 
@@ -135,14 +132,11 @@ export default function Services() {
 
 /* ── Service Card ─────────────────────────────────────────── */
 function ServiceCard({ service: s, index: i }) {
-  const imgSrc = s.photo_url ? `${API}${s.photo_url}` : null
+  // photo_url is already a full URL from api.js
+  const imgSrc = s.photo_url || null
 
   return (
-    <div
-      className={styles.serviceCard}
-      style={{ animationDelay: `${i * 0.07}s` }}
-    >
-      {/* ── Image ── */}
+    <div className={styles.serviceCard} style={{ animationDelay: `${i * 0.07}s` }}>
       {imgSrc ? (
         <div className={styles.cardImage}>
           <img src={imgSrc} alt={s.title} />
@@ -154,7 +148,6 @@ function ServiceCard({ service: s, index: i }) {
         </div>
       )}
 
-      {/* ── Content ── */}
       <div className={styles.cardBody}>
         <h3 className={styles.cardTitle}>{s.title}</h3>
         <p className={styles.cardDesc}>{s.description}</p>
