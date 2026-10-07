@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "stats",
+  "info": {
+    "singularName": "stat",
+    "pluralName": "stats",
+    "displayName": "Stat "
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "projects_completed": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "happy_clients": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "years_experience": {
+      "type": "integer"
+    }
+  }
+}

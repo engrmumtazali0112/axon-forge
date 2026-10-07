@@ -35,7 +35,7 @@
 [![Location](https://img.shields.io/badge/📍-Lahore,_Pakistan_·_Remote-F5A623?style=flat-square&labelColor=0a0a0a)](https://maps.google.com)
 [![Projects](https://img.shields.io/badge/🚀_Projects-85+-F5A623?style=flat-square&labelColor=0a0a0a)](https://linkedin.com/in/nexttech-sol)
 [![Clients](https://img.shields.io/badge/🤝_Clients-60+-F5A623?style=flat-square&labelColor=0a0a0a)](https://linkedin.com/in/nexttech-sol)
-[![Live Demo](https://img.shields.io/badge/▲_Live_Demo-axonforge.vercel.app-000000?style=flat-square&logo=vercel&logoColor=white)](https://axonforge.vercel.app)
+[![Live Demo](https://img.shields.io/badge/▲_Live_Demo-axon-forge.vercel.app-000000?style=flat-square&logo=vercel&logoColor=white)](https://axon-forge.vercel.app)
 
 </div>
 

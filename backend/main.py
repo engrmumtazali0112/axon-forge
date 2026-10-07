@@ -112,8 +112,8 @@ app.mount("/media", StaticFiles(directory="media"), name="media")
 
 @app.on_event("startup")
 def on_startup():
-    Base.metadata.create_all(bind=engine)
-    print("✅  Database tables ready.")
+    # Base.metadata.create_all(bind=engine)   # Disabled — not needed since Strapi handles content
+    print("✅  API ready (Strapi handles content, FastAPI handles contact form).")
 
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
