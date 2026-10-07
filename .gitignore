@@ -1,22 +1,20 @@
-# Create .gitignore to exclude sensitive/unnecessary files
-cat > .gitignore << 'EOF'
-# Python / Backend
-backend/venv/
-backend/__pycache__/
-backend/**/__pycache__/
-backend/*.pyc
-backend/.env
-backend/*.db
-backend/*.sqlite3
+# Maven build output
+target/
 
-# Node / Frontend
-frontend/node_modules/
+# Downloaded jars (Maven fetches these automatically now)
+*.jar
+
+# TestNG output reports
+test-output/
+node_modules/
+# ChromeDriver (each machine can have its own)
+chromedriver-win64/
+.env
+.env.*
+!.env.example
+__pycache__/
+node_modules/
+dist/
 frontend/dist/
-frontend/.env
-
-# OS
-.DS_Store
-Thumbs.db
-EOF
-.vercel
-.env*.local
+venv/
+.venv/
