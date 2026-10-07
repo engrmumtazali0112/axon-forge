@@ -1,167 +1,94 @@
-/* ═══ NEXT TECH SOLUTIONS — Footer ═══════════════════════
-   Pure gold (#F5A623) + black (#080808).
-   No CSS custom-property colours from the old blue theme.
-   ════════════════════════════════════════════════════════ */
+/* ═══ AXON FORGE — Footer (light) ═══ */
 
-/* ── Shell ── */
 .footer {
-  background: #080808;                           /* solid black – not var(--bg-secondary) */
-  border-top: 1px solid rgba(245,166,35,0.15);
-  padding: 76px 0 0;
-  position: relative;
-  overflow: hidden;
-}
-/* soft radial glow behind content */
-.footer::before {
-  content: '';
-  position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
-  width: 800px; height: 200px;
-  background: radial-gradient(ellipse, rgba(245,166,35,0.05) 0%, transparent 70%);
-  pointer-events: none;
+  background: var(--bg-soft, #f6f8fb);
+  border-top: 1px solid var(--line, #e6eaf0);
+  padding: 72px 0 0;
 }
 
-/* gold hairline accent at the very top */
-.topGlow {
-  display: block;
-  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 500px; height: 1px;
-  background: linear-gradient(90deg, transparent, #F5A623, transparent);
-  opacity: 0.5;
-}
-
-/* ── 4-col grid ── */
 .grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1.55fr;
+  grid-template-columns: 2fr 1fr 1fr 1.6fr;
   gap: 48px;
-  padding-bottom: 60px;
+  padding-bottom: 56px;
 }
 
-/* ── Brand column ── */
+/* Brand */
 .brand { display: flex; flex-direction: column; gap: 20px; }
-
-.logo {
-  display: inline-flex; align-items: center; gap: 10px;
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-.logo:hover { opacity: 0.85; }
-
-.logoText {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800; font-size: 1.05rem; line-height: 1.1;
-  display: flex; flex-direction: column;
-}
-.logoMain { color: #ffffff; }         /* WHITE  — "Next" */
-.logoGold { color: #F5A623; }         /* GOLD   — "Tech" */
-.logoSub {
-  font-size: 0.52rem; font-weight: 500;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: #F5A623; margin-top: 3px;
-}
-
+.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; width: fit-content; }
+.logoText { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; letter-spacing: 0.01em; }
 .tagline {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.875rem; color: #ebe7e7;
-  line-height: 1.75; max-width: 300px;
+  font-size: 0.92rem; line-height: 1.75;
+  color: var(--text, #4a5568); max-width: 320px; margin: 0;
 }
 
-/* social icons */
-.socials { display: flex; gap: 9px; }
+.socials { display: flex; gap: 10px; }
 .socialBtn {
-  width: 36px; height: 36px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 9px;
+  width: 38px; height: 38px;
   display: flex; align-items: center; justify-content: center;
-  color: #444; text-decoration: none;
-  transition: all 0.2s ease;
+  background: #fff; border: 1px solid var(--line, #e6eaf0);
+  border-radius: 50%;
+  color: var(--blue, #2e9bd6); text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
-.socialBtn:hover {
-  background: rgba(245,166,35,0.09);
-  border-color: rgba(245,166,35,0.32);
-  color: #F5A623;
-  transform: translateY(-2px);
-}
+.socialBtn:hover { background: var(--blue, #2e9bd6); border-color: var(--blue, #2e9bd6); color: #fff; }
 
-/* ── Nav / Services columns ── */
+/* Link columns */
 .colTitle {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.66rem; font-weight: 700;
-  letter-spacing: 0.16em; text-transform: uppercase;
-  color: #ffffff;                      /* WHITE headings */
-  margin-bottom: 20px;
-}
-
-.col ul {
-  list-style: none;
-  display: flex; flex-direction: column; gap: 9px;
-}
-.col ul li a {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.875rem; color: #ebe7e7;
-  text-decoration: none;
-  transition: color 0.2s, padding-left 0.2s;
-}
-.col ul li a:hover { color: #F5A623; padding-left: 3px; }
-
-.arrow { color: #252525; transition: color 0.2s; }
-.col ul li a:hover .arrow { color: #F5A623; }
-
-/* ── Contact column ── */
-.contactList {
-  list-style: none;
-  display: flex; flex-direction: column; gap: 11px;
-  margin-bottom: 20px;
-}
-.contactList li {
-  display: flex; align-items: center; gap: 9px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.855rem; color: #ebe7e7;
-  line-height: 1.4;
-}
-.contactIcon {
-  width: 26px; height: 26px; flex-shrink: 0;
-  background: rgba(245,166,35,0.07);
-  border: 1px solid rgba(245,166,35,0.18);
-  border-radius: 7px;
-  display: flex; align-items: center; justify-content: center;
-  color: #F5A623;
-}
-.contactEmail {
-  color: #F5A623 !important;
-  text-decoration: none; font-weight: 500;
-  font-size: 0.82rem; transition: color 0.2s;
-  word-break: break-all;
-}
-.contactEmail:hover { color: #FFD07A !important; }
-
-.footerCta {
-  display: inline-flex; align-items: center;
-  padding: 9px 20px;
   font-family: 'Syne', sans-serif;
-  font-size: 0.82rem; font-weight: 700;
-  color: #000; background: #F5A623;
-  border-radius: 8px; text-decoration: none;
-  transition: all 0.2s;
+  font-size: 1rem; font-weight: 700;
+  color: var(--ink, #0b1220);
+  margin: 0 0 18px;
 }
-.footerCta:hover {
-  background: #FFD07A;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(245,166,35,0.3);
+.col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 11px; }
+.col ul li a {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.92rem; color: var(--ink, #0b1220);
+  text-decoration: none;
+  transition: color 0.2s;
 }
+.col ul li a:hover { color: var(--blue, #2e9bd6); text-decoration: underline; text-underline-offset: 4px; }
 
-/* ── Bottom bar ── */
+/* Contact column */
+.contactList { margin-bottom: 22px !important; gap: 12px !important; }
+.contactList li {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+  color: var(--text, #4a5568);
+}
+.icon {
+  width: 28px; height: 28px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--blue-soft, #e8f4fb);
+  border-radius: 8px; color: var(--blue, #2e9bd6);
+}
+.email { color: var(--blue, #2e9bd6) !important; font-weight: 500; word-break: break-all; }
+
+.cta {
+  display: inline-flex; align-items: center;
+  padding: 10px 22px;
+  font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700;
+  color: var(--ink, #0b1220); background: var(--gold, #f5a623);
+  border-radius: 8px; text-decoration: none;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.cta:hover { background: #ffb93d; transform: translateY(-1px); box-shadow: 0 8px 20px rgba(245,166,35,0.3); }
+
+/* Bottom bar */
 .bottom {
-  border-top: 1px solid rgba(255,255,255,0.05);
+  border-top: 1px solid var(--line, #e6eaf0);
   padding: 22px 0;
   display: flex; justify-content: space-between; align-items: center;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.8rem; color: #b6b1b1;
+  font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+  color: var(--muted, #7b8494);
+}
+.bottom p { margin: 0; }
+
+.socialBtn:focus-visible, .cta:focus-visible, .col a:focus-visible, .logo:focus-visible {
+  outline: 2px solid var(--blue, #2e9bd6); outline-offset: 3px;
 }
 
-/* ── Responsive ── */
 @media (max-width: 900px) {
   .grid { grid-template-columns: 1fr 1fr; gap: 36px; }
   .brand { grid-column: span 2; }

@@ -1,305 +1,206 @@
-import { useState, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { Mail, Phone, MapPin, Send, Check, Github, Linkedin, Twitter, Clock, DollarSign } from 'lucide-react'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { ArrowRight, Check, Mail, MapPin, Clock, Loader2 } from 'lucide-react'
+import { submitContact } from '../api'
 import styles from './Contact.module.css'
 
-/* ── EmailJS credentials ── */
-const EMAILJS_SERVICE_ID  = '21dmbcs124'
-const EMAILJS_TEMPLATE_ID = 'template_9pkkqa9'
-const EMAILJS_PUBLIC_KEY  = 'gP5gF9RPdQC3gvB-c'
+const BUDGETS = ['Under $5k', '$5k – $15k', '$15k – $50k', '$50k+', 'Not sure yet']
 
-const SERVICES = [
-  'SaaS Development', 'Web Development', 'AI & ML Solutions',
-  'Mobile Development', 'Cloud & DevOps', 'UI/UX Design',
-  'Computer Vision', 'LLM Fine-tuning', 'RAG Systems', 'Other',
+const STEPS = [
+  'We read every message ourselves, a person, not an autoresponder.',
+  'You get a reply within 24 hours with times for a call.',
+  '30-minute call: your goals, our questions, a rough shape and budget.',
+  "If it's a fit, a written scope and fixed quote within a week.",
 ]
 
-const INFO_ITEMS = [
-  { Icon: Mail,       label: 'Email',    value: 'engrmumtazali01@gmail.com', href: 'mailto:engrmumtazali01@gmail.com' },
-  { Icon: Phone,      label: 'Phone',    value: '+92 XXX XXXXXXX',           href: 'tel:+92XXXXXXXXX' },
-  { Icon: MapPin,     label: 'Location', value: 'Lahore, Pakistan · Remote', href: null },
-  { Icon: Clock,      label: 'Response', value: 'Within 24 hours',           href: null },
-  { Icon: DollarSign, label: 'Rate',     value: 'Starting at $20 / hr',      href: null },
-]
-
-const SOCIALS = [
-  { Icon: Linkedin, href: 'https://linkedin.com/in/nexttech-sol', label: 'LinkedIn' },
-  { Icon: Github,   href: 'https://github.com/yourusername',      label: 'GitHub' },
-  { Icon: Twitter,  href: '#',                                    label: 'Twitter' },
-  { Icon: Mail,     href: 'mailto:engrmumtazali01@gmail.com',     label: 'Email' },
-]
-
-const FAQ = [
-  { q: 'How quickly can you start?',         a: 'Usually within 1–2 business days after project scoping.' },
-  { q: 'Do you offer fixed-price projects?', a: 'Yes! Both hourly and fixed-price engagements available.' },
-  { q: 'What is your tech stack?',           a: 'FastAPI, React, Django, PostgreSQL, AWS, Docker, LangChain & more.' },
-  { q: 'Do you sign NDAs?',                  a: 'Absolutely. We sign NDAs before any project discussion.' },
-]
-
-const BLUE = '#5BB8E8'
-const GOLD = '#F5A623'
-
-/* ── Axon Forge logo mark (matching Navbar) ── */
-function LogoMark({ size = 36 }) {
-  const scale = size / 44
-  return (
-    <svg
-      width={44 * scale}
-      height={30 * scale}
-      viewBox="0 0 44 30"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-label="Axon Forge icon"
-    >
-      <path d="M2,26 C10,22 22,10 40,5" stroke={GOLD} strokeWidth="2.6" strokeLinecap="round" />
-      <circle cx="40" cy="5" r="2.2" fill={GOLD} />
-      <path d="M2,28 C10,25 22,16 39,12" stroke={BLUE} strokeWidth="2.6" strokeLinecap="round" />
-      <circle cx="39" cy="12" r="2.2" fill={BLUE} />
-      <path d="M2,29.5 C10,28 22,22 38,19" stroke={GOLD} strokeWidth="2.6" strokeLinecap="round" />
-      <circle cx="38" cy="19" r="2.2" fill={GOLD} />
-    </svg>
-  )
-}
+const EMPTY = { goal: '', name: '', email: '', company: '', phone: '', budget: '', nda: false }
 
 export default function Contact() {
-  const [loading, setLoading] = useState(false)
-  const [done,    setDone]    = useState(false)
-  const { register, handleSubmit, reset, formState: { errors } } = useForm()
+  const [form, setForm]     = useState(EMPTY)
+  const [errors, setErrors] = useState({})
+  const [status, setStatus] = useState('idle') // idle | sending | done | error
+  const [apiError, setApiError] = useState('')
 
-  /* Load EmailJS once */
-  useEffect(() => {
-    if (!window.emailjs) {
-      const s = document.createElement('script')
-      s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js'
-      s.onload = () => window.emailjs.init(EMAILJS_PUBLIC_KEY)
-      document.head.appendChild(s)
-    } else {
-      window.emailjs.init(EMAILJS_PUBLIC_KEY)
-    }
-  }, [])
+  const set = (k, v) => {
+    setForm((f) => ({ ...f, [k]: v }))
+    if (errors[k]) setErrors((e) => ({ ...e, [k]: undefined }))
+  }
 
-  const onSubmit = async (data) => {
-    setLoading(true)
+  const validate = () => {
+    const e = {}
+    if (!form.goal.trim())  e.goal  = 'Tell us a little about what you want to build or fix.'
+    if (!form.name.trim())  e.name  = 'Name is required.'
+    if (!form.email.trim()) e.email = 'Work email is required.'
+    else if (!/^\S+@\S+\.\S+$/.test(form.email)) e.email = 'Enter a valid email address.'
+    setErrors(e)
+    return Object.keys(e).length === 0
+  }
+
+  const onSubmit = async (ev) => {
+    ev.preventDefault()
+    if (!validate()) return
+    setStatus('sending'); setApiError('')
     try {
-      await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        name:    data.name,
-        email:   data.email,
-        phone:   data.phone   || 'N/A',
-        company: data.company || 'N/A',
-        service: data.service || 'N/A',
-        subject: data.subject,
-        message: data.message,
+      // Budget and NDA are appended to the message so the existing FastAPI schema keeps working.
+      const extras = [
+        form.budget && `Indicative budget: ${form.budget}`,
+        form.nda && 'Requested an NDA before discussing details.',
+      ].filter(Boolean)
+      await submitContact({
+        name:    form.name.trim(),
+        email:   form.email.trim(),
+        company: form.company.trim() || undefined,
+        phone:   form.phone.trim() || undefined,
+        subject: form.goal.trim().slice(0, 80) || 'New project enquiry',
+        message: [form.goal.trim(), ...extras].join('\n\n'),
       })
-      toast.success("Message sent! I'll reply within 24 hours ✅")
-      setDone(true)
-      reset()
-    } catch {
-      toast.error('Send failed — please email directly.')
-    } finally {
-      setLoading(false)
+      setStatus('done'); setForm(EMPTY)
+    } catch (err) {
+      setApiError(err?.response?.data?.detail || err?.message || 'Something went wrong. Please try again.')
+      setStatus('error')
     }
   }
 
   return (
     <main className={styles.page}>
-
-      {/* ── Hero ── */}
-      <div className={styles.hero}>
-        <div className={styles.heroBg} />
-        <div className={styles.heroLine} />
-        <div className={`container ${styles.heroInner}`}>
-          <div className={styles.eyebrow}>
-            <span className={styles.eyebrowDot} />
-            Get In Touch
-          </div>
-          <h1 className={styles.heroTitle}>
-            Let's Build Something{' '}
-            <span className={styles.gold}>Amazing</span>
-          </h1>
-        </div>
-      </div>
-
-      {/* ── Body ── */}
       <div className="container">
         <div className={styles.layout}>
 
-          {/* ── Left info ── */}
-          <div className={styles.infoCol}>
+          {/* ── Left: intro + what happens next + contact details ── */}
+          <section className={styles.info}>
+            <p className={styles.eyebrow}>Start here</p>
+            <h1 className={styles.h1}>Tell us what you&apos;re building.</h1>
+            <p className={styles.lead}>
+              One form, one call, and you&apos;ll know what it takes and what it costs. No sales
+              sequence, no pitch deck, no obligation to continue.
+            </p>
 
-            <div className={styles.availBadge}>
-              <span className={styles.availDot} />
-              Available for New Projects
-            </div>
+            <ol className={styles.steps}>
+              {STEPS.map((t, i) => (
+                <li key={t}><span className={styles.stepNo}>{i + 1}</span><span>{t}</span></li>
+              ))}
+            </ol>
 
-            <div className={styles.infoCards}>
-              {INFO_ITEMS.map(({ Icon, label, value, href }) => (
-                <div key={label} className={styles.infoCard}>
-                  <div className={styles.infoIcon}><Icon size={16} /></div>
-                  <div>
-                    <div className={styles.infoLabel}>{label}</div>
-                    {href
-                      ? <a href={href} className={`${styles.infoValue} ${styles.gold}`}>{value}</a>
-                      : <div className={styles.infoValue}>{value}</div>}
-                  </div>
+            <div className={styles.divider} />
+
+            <ul className={styles.details}>
+              <li>
+                <span className={styles.dIcon}><Mail size={16} /></span>
+                <div>
+                  <p className={styles.dLabel}>Email</p>
+                  <a href="mailto:engrmumtazali01@gmail.com" className={styles.dValue}>engrmumtazali01@gmail.com</a>
                 </div>
-              ))}
-            </div>
-
-            <div className={styles.socials}>
-              {SOCIALS.map(({ Icon, href, label }) => (
-                <a key={label} href={href} target="_blank" rel="noreferrer"
-                   className={styles.socialBtn} aria-label={label}>
-                  <Icon size={16} />
-                </a>
-              ))}
-            </div>
-
-            <div className={styles.offersBox}>
-              <div className={styles.offersTitle}>What You Get</div>
-              {['Free consultation call', 'Fixed-price projects available',
-                'Clean, documented code', 'On-time delivery guaranteed',
-                'Post-launch support included', 'NDA available on request'].map(item => (
-                <div key={item} className={styles.offerItem}>
-                  <span className={styles.offerCheck}>✓</span>{item}
+              </li>
+              <li>
+                <span className={styles.dIcon}><MapPin size={16} /></span>
+                <div>
+                  <p className={styles.dLabel}>Office</p>
+                  <p className={styles.dValue}>Lahore, Pakistan · Remote worldwide</p>
                 </div>
-              ))}
-            </div>
-          </div>
+              </li>
+              <li>
+                <span className={styles.dIcon}><Clock size={16} /></span>
+                <div>
+                  <p className={styles.dLabel}>Reply time</p>
+                  <p className={styles.dValue}>Within 24 hours</p>
+                </div>
+              </li>
+            </ul>
+          </section>
 
-          {/* ── Right form ── */}
-          <div className={styles.formWrap}>
-
-            {/* Form header with Axon Forge logo */}
-            <div className={styles.formHead}>
-              <LogoMark size={36} />
-              <div>
-                <h2 className={styles.formTitle}>Send a Message</h2>
-                <p className={styles.formSubtitle}>
-                  Fields marked <span className={styles.gold}>*</span> are required
+          {/* ── Right: form card ── */}
+          <section className={styles.card} aria-labelledby="form-title">
+            {status === 'done' ? (
+              <div className={styles.success} role="status">
+                <span className={styles.successIcon}><Check size={30} /></span>
+                <h2 className={styles.formTitle}>Message received</h2>
+                <p className={styles.sub}>
+                  Thanks for reaching out. We&apos;ll read it properly and reply within 24 hours
+                  with times for a call.
                 </p>
-              </div>
-            </div>
-
-            {done ? (
-              /* ── Success state ── */
-              <div className={styles.successBox}>
-                <div className={styles.successRing}>
-                  <Check size={32} color="#F5A623" strokeWidth={2.5} />
+                <div className={styles.successBtns}>
+                  <button type="button" className={styles.btnGhost} onClick={() => setStatus('idle')}>Send another</button>
+                  <Link to="/portfolio" className={styles.btnGold}>See our work <ArrowRight size={16} /></Link>
                 </div>
-                <div className={styles.successBadge}>
-                  <span className={styles.availDot} /> Message Delivered ✅
-                </div>
-                <h3 className={styles.successTitle}>Thank You! 🎉</h3>
-                <p className={styles.successDesc}>
-                  Sent to{' '}
-                  <a href="mailto:engrmumtazali01@gmail.com" className={styles.gold}>
-                    engrmumtazali01@gmail.com
-                  </a>
-                  . I'll respond within <strong className={styles.gold}>24 hours</strong>.
-                </p>
-                <button className={styles.resetBtn} onClick={() => setDone(false)}>
-                  ↩ Send Another Message
-                </button>
               </div>
             ) : (
-              /* ── Form ── */
-              <form onSubmit={handleSubmit(onSubmit)} className={styles.form} noValidate>
-
-                <div className={styles.formRow}>
-                  <div className={styles.field}>
-                    <label className={styles.label}>Full Name <span className={styles.gold}>*</span></label>
-                    <input {...register('name', { required: 'Name is required' })}
-                      placeholder="Mumtaz Ali"
-                      className={`${styles.input} ${errors.name ? styles.inputErr : ''}`}/>
-                    {errors.name && <span className={styles.err}>⚠ {errors.name.message}</span>}
-                  </div>
-                  <div className={styles.field}>
-                    <label className={styles.label}>Email Address <span className={styles.gold}>*</span></label>
-                    <input type="email"
-                      {...register('email', { required: 'Email is required', pattern: { value: /^\S+@\S+$/i, message: 'Invalid email' } })}
-                      placeholder="you@company.com"
-                      className={`${styles.input} ${errors.email ? styles.inputErr : ''}`}/>
-                    {errors.email && <span className={styles.err}>⚠ {errors.email.message}</span>}
-                  </div>
-                </div>
-
-                <div className={styles.formRow}>
-                  <div className={styles.field}>
-                    <label className={styles.label}>Company</label>
-                    <input {...register('company')} placeholder="Your Company (optional)" className={styles.input}/>
-                  </div>
-                  <div className={styles.field}>
-                    <label className={styles.label}>Phone Number</label>
-                    <input {...register('phone')} placeholder="+92 XXX XXXXXXX" className={styles.input}/>
-                  </div>
-                </div>
+              <form onSubmit={onSubmit} noValidate>
+                <h2 id="form-title" className={styles.formTitle}>Get a scope and a ballpark</h2>
+                <p className={styles.sub}>Free, no obligation. Stage 01 of the process.</p>
 
                 <div className={styles.field}>
-                  <label className={styles.label}>Service Interested In</label>
-                  <select {...register('service')} className={`${styles.input} ${styles.select}`}>
-                    <option value="">Select a service...</option>
-                    {SERVICES.map(s => <option key={s} value={s}>{s}</option>)}
-                  </select>
+                  <label htmlFor="goal" className={styles.label}>What are you trying to build or fix? *</label>
+                  <textarea id="goal" rows={4} className={`${styles.input} ${errors.goal ? styles.invalid : ''}`}
+                    placeholder="e.g. We run scheduling for 40 field engineers out of spreadsheets and want it as a proper web app with a mobile view."
+                    value={form.goal} onChange={(e) => set('goal', e.target.value)} aria-invalid={!!errors.goal} />
+                  {errors.goal && <p className={styles.err} role="alert">{errors.goal}</p>}
                 </div>
 
-                <div className={styles.field}>
-                  <label className={styles.label}>Subject <span className={styles.gold}>*</span></label>
-                  <input {...register('subject', { required: 'Subject is required' })}
-                    placeholder="e.g. AI-powered analytics platform"
-                    className={`${styles.input} ${errors.subject ? styles.inputErr : ''}`}/>
-                  {errors.subject && <span className={styles.err}>⚠ {errors.subject.message}</span>}
+                <div className={styles.row}>
+                  <div className={styles.field}>
+                    <label htmlFor="name" className={styles.label}>Name *</label>
+                    <input id="name" type="text" autoComplete="name" className={`${styles.input} ${errors.name ? styles.invalid : ''}`}
+                      placeholder="Jane Okafor" value={form.name} onChange={(e) => set('name', e.target.value)} aria-invalid={!!errors.name} />
+                    {errors.name && <p className={styles.err} role="alert">{errors.name}</p>}
+                  </div>
+                  <div className={styles.field}>
+                    <label htmlFor="email" className={styles.label}>Work email *</label>
+                    <input id="email" type="email" autoComplete="email" className={`${styles.input} ${errors.email ? styles.invalid : ''}`}
+                      placeholder="jane@company.com" value={form.email} onChange={(e) => set('email', e.target.value)} aria-invalid={!!errors.email} />
+                    {errors.email && <p className={styles.err} role="alert">{errors.email}</p>}
+                  </div>
                 </div>
 
-                <div className={styles.field}>
-                  <label className={styles.label}>Message <span className={styles.gold}>*</span></label>
-                  <textarea {...register('message', { required: 'Message is required' })}
-                    rows={5}
-                    placeholder="Describe your project, timeline, and requirements..."
-                    className={`${styles.input} ${styles.textarea} ${errors.message ? styles.inputErr : ''}`}/>
-                  {errors.message && <span className={styles.err}>⚠ {errors.message.message}</span>}
+                <div className={styles.row}>
+                  <div className={styles.field}>
+                    <label htmlFor="company" className={styles.label}>Company <span className={styles.opt}>(optional)</span></label>
+                    <input id="company" type="text" autoComplete="organization" className={styles.input}
+                      placeholder="Acme Ltd" value={form.company} onChange={(e) => set('company', e.target.value)} />
+                  </div>
+                  <div className={styles.field}>
+                    <label htmlFor="phone" className={styles.label}>Phone or WhatsApp <span className={styles.opt}>(optional)</span></label>
+                    <input id="phone" type="tel" autoComplete="tel" className={styles.input}
+                      placeholder="+1 555 000 1234" value={form.phone} onChange={(e) => set('phone', e.target.value)} />
+                  </div>
                 </div>
 
-                <button type="submit" disabled={loading} className={styles.submitBtn}>
-                  {loading
-                    ? <><span className={styles.spinner} /> Sending...</>
-                    : <><Send size={15} /> Send Message</>}
-                </button>
+                <fieldset className={styles.budget}>
+                  <legend className={styles.label}>Indicative budget</legend>
+                  <p className={styles.hint}>Optional, it helps us scope realistically.</p>
+                  <div className={styles.chips}>
+                    {BUDGETS.map((b) => (
+                      <button key={b} type="button" aria-pressed={form.budget === b}
+                        className={`${styles.chip} ${form.budget === b ? styles.chipOn : ''}`}
+                        onClick={() => set('budget', form.budget === b ? '' : b)}>{b}</button>
+                    ))}
+                  </div>
+                </fieldset>
 
-                <p className={styles.formNote}>
-                  🔒 Securely sent to{' '}
-                  <span className={styles.gold}>engrmumtazali01@gmail.com</span>
-                  {' '}· Reply within 24 hours ⚡
+                <label className={styles.check}>
+                  <input type="checkbox" checked={form.nda} onChange={(e) => set('nda', e.target.checked)} />
+                  <span>Send me an NDA before we discuss anything.</span>
+                </label>
+
+                {status === 'error' && <p className={styles.errBox} role="alert">{apiError}</p>}
+
+                <div className={styles.actions}>
+                  <button type="submit" className={styles.btnGold} disabled={status === 'sending'}>
+                    {status === 'sending'
+                      ? <><Loader2 size={16} className={styles.spin} /> Sending…</>
+                      : <>Send and book a call <ArrowRight size={16} /></>}
+                  </button>
+                  <span className={styles.reply}><Check size={15} /> We reply within 24 hours.</span>
+                </div>
+
+                <p className={styles.fine}>
+                  By sending this you agree to our privacy policy. We never share your details or
+                  add you to a mailing list.
                 </p>
               </form>
             )}
-          </div>
+          </section>
         </div>
       </div>
-
-      {/* ── FAQ ── */}
-      <section className={styles.faqSection}>
-        <div className="container">
-          <div className={styles.faqHead}>
-            <div className={styles.secLabel}>Common Questions</div>
-            <h2 className={styles.faqTitle}>Frequently Asked</h2>
-          </div>
-          <div className={styles.faqGrid}>
-            {FAQ.map(({ q, a }) => (
-              <div key={q} className={styles.faqCard}>
-                <h4 className={styles.faqQ}>{q}</h4>
-                <p className={styles.faqA}>{a}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <style>{`
-        @keyframes spin     { to { transform: rotate(360deg); } }
-        @keyframes fadeUp   { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes glow     { 0%,100%{box-shadow:0 0 8px #F5A623} 50%{box-shadow:0 0 18px #F5A623} }
-      `}</style>
     </main>
   )
 }
