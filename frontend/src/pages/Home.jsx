@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Code2, TrendingUp, Users, Briefcase, Star, Target, BarChart3, Rocket, Wrench } from 'lucide-react'
+import { ArrowRight, Code2, TrendingUp, Users, Briefcase, Star, Target, BarChart3, Rocket, Wrench, Plus, X } from 'lucide-react'
 import { getServices, getStats, getTestimonials } from '../api'
 import styles from './Home.module.css'
-
-const API = 'http://localhost:8000'
 
 const BLUE = '#5BB8E8'
 const GOLD = '#F5A623'
@@ -12,7 +10,8 @@ const GOLD = '#F5A623'
 function AnimatedCounter({ target, suffix = '' }) {
   const [count, setCount] = useState(0)
   useEffect(() => {
-    const step = Math.ceil(target / 55)
+    if (!target) return
+    const step  = Math.ceil(target / 55)
     const timer = setInterval(() => {
       setCount(prev => {
         if (prev + step >= target) { clearInterval(timer); return target }
@@ -24,18 +23,11 @@ function AnimatedCounter({ target, suffix = '' }) {
   return <span>{count}{suffix}</span>
 }
 
-/* ── Axon Forge LogoMark (matching Navbar) ── */
 function LogoMark({ size = 44 }) {
   const scale = size / 44
   return (
-    <svg
-      width={44 * scale}
-      height={30 * scale}
-      viewBox="0 0 44 30"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-label="Axon Forge icon"
-    >
+    <svg width={44 * scale} height={30 * scale} viewBox="0 0 44 30" fill="none"
+      xmlns="http://www.w3.org/2000/svg" aria-label="Axon Forge icon">
       <path d="M2,26 C10,22 22,10 40,5" stroke={GOLD} strokeWidth="2.6" strokeLinecap="round" />
       <circle cx="40" cy="5" r="2.2" fill={GOLD} />
       <path d="M2,28 C10,25 22,16 39,12" stroke={BLUE} strokeWidth="2.6" strokeLinecap="round" />
@@ -62,6 +54,97 @@ const AUTO_FEATURES = [
   { Icon: Rocket,    title: 'Scale Confidently',     desc: 'Architecture built to handle 10x growth without rebuilding from scratch.' },
 ]
 
+
+/* ── FAQ (edit the answers to match your real terms) ── */
+const FAQS = [
+  { q: 'What does Axon Forge do?',
+    a: 'Axon Forge is a remote-first software agency. We build SaaS platforms, web and mobile apps, AI and machine-learning features, and cloud infrastructure for startups and growing businesses, working with clients across several continents.' },
+  { q: 'How much does it cost to build a SaaS or web application?',
+    a: 'Our rates start at $20/hour, and we also offer fixed-price projects. After a free discovery call we send a written scope, timeline and quote within 24 hours, so you know the cost before any work starts.' },
+  { q: 'How long does a project take?',
+    a: 'It depends on scope. A focused MVP is measured in weeks, a larger platform in months. We work in agile sprints with a demo every week, so you see real progress throughout rather than at the end.' },
+  { q: 'Who owns the code and the intellectual property?',
+    a: 'You do. Source code, repositories and credentials are handed over with documentation at launch, and we are happy to put that in writing before we start.' },
+  { q: 'Do you work with startups and first-time founders?',
+    a: 'Yes, most of our clients are startups. We help you decide what to build first, keep the first version small, and design the architecture so it can grow without a rebuild.' },
+  { q: 'Can we sign an NDA first?',
+    a: 'Of course. Tell us when you get in touch and we will sign an NDA before you share anything sensitive.' },
+  { q: 'Do you offer support after launch?',
+    a: 'Yes. Post-launch support is included with every project, and we can stay on for monitoring, fixes and new features as the product grows.' },
+]
+
+function FaqSection() {
+  const [open, setOpen] = useState(0)
+  return (
+    <section className="section">
+      <style>{FAQ_CSS}</style>
+      <div className="container">
+        <div className="faq-grid">
+          <div className="faq-left">
+            <div className={styles.secLabel}>Questions</div>
+            <h2 className={styles.secTitle}>The things clients ask before signing</h2>
+            <p className={styles.secSub}>
+              Straight answers, including the ones about money and ownership. If yours isn&apos;t here,
+              ask it on the call. We&apos;d rather resolve it before a contract than after.
+            </p>
+            <div className="faq-callout">
+              <h3>Still unsure whether it&apos;s worth building?</h3>
+              <p>Bring the idea to a 30-minute call. We&apos;ll tell you honestly whether it&apos;s a short build or a long one, and if you shouldn&apos;t build it at all, we&apos;ll say that too.</p>
+              <Link to="/contact" className="faq-btn">Book the call <ArrowRight size={15} /></Link>
+            </div>
+          </div>
+
+          <div className="faq-list">
+            {FAQS.map((f, i) => {
+              const isOpen = open === i
+              return (
+                <div key={f.q} className={`faq-item ${isOpen ? 'is-open' : ''}`}>
+                  <h3>
+                    <button type="button" className="faq-q" aria-expanded={isOpen} aria-controls={`faq-a-${i}`}
+                      onClick={() => setOpen(isOpen ? -1 : i)}>
+                      <span>{f.q}</span>
+                      <span className="faq-ico">{isOpen ? <X size={14} /> : <Plus size={14} />}</span>
+                    </button>
+                  </h3>
+                  <div id={`faq-a-${i}`} className="faq-a" role="region">
+                    <div><p>{f.a}</p></div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+const FAQ_CSS = `
+.faq-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:72px;align-items:start}
+.faq-left{position:sticky;top:110px}
+.faq-callout{margin-top:32px;padding:28px;border-radius:18px;background:#fff4de;border:1px solid rgba(245,166,35,.35)}
+.faq-callout h3{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;color:#0b1220;margin:0 0 8px}
+.faq-callout p{font-size:.92rem;line-height:1.7;color:#4a5568;margin:0 0 20px}
+.faq-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 22px;border-radius:10px;text-decoration:none;
+  font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;color:#fff;background:#2E9BD6;transition:all .22s}
+.faq-btn:hover{background:#1f7fb8;transform:translateY(-2px);box-shadow:0 12px 26px rgba(46,155,214,.35)}
+.faq-list{border-top:1px solid #dbe9f5}
+.faq-item{border-bottom:1px solid #dbe9f5}
+.faq-item h3{margin:0}
+.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px 0;background:none;border:0;cursor:pointer;
+  text-align:left;font-family:'Syne',sans-serif;font-weight:700;font-size:1.08rem;color:#0b1220;transition:color .2s}
+.faq-q:hover,.is-open .faq-q{color:#1f7fb8}
+.faq-ico{flex-shrink:0;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;border:1px solid #dbe9f5;background:#fff;color:#0b1220;transition:all .2s}
+.is-open .faq-ico{background:#2E9BD6;border-color:#2E9BD6;color:#fff}
+.faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+.is-open .faq-a{grid-template-rows:1fr}
+.faq-a>div{overflow:hidden}
+.faq-a p{margin:0;padding:0 54px 26px 0;font-size:.98rem;line-height:1.8;color:#4a5568}
+.faq-q:focus-visible{outline:2px solid #2E9BD6;outline-offset:3px;border-radius:6px}
+@media(max-width:900px){.faq-grid{grid-template-columns:1fr;gap:40px}.faq-left{position:static}.faq-a p{padding-right:0}}
+@media(prefers-reduced-motion:reduce){.faq-a{transition:none}}
+`
+
 export default function Home() {
   const [services,     setServices]     = useState([])
   const [stats,        setStats]        = useState(null)
@@ -75,7 +158,6 @@ export default function Home() {
 
   return (
     <div>
-
       {/* ── Hero ── */}
       <section className={styles.hero}>
         <div className={styles.heroBg} />
@@ -110,7 +192,6 @@ export default function Home() {
 
             <div className={styles.heroVisual}>
               <div className={styles.quoteCard}>
-                {/* Axon Forge logo in quote card */}
                 <div style={{ marginBottom: 12 }}>
                   <LogoMark size={36} />
                 </div>
@@ -159,14 +240,30 @@ export default function Home() {
       </div>
 
       {/* ── Stats ── */}
-      {stats && (
+      {stats && stats.projects_completed && (
         <section className={styles.statsSection}>
           <div className="container">
             <div className={styles.statsGrid}>
-              <div className={styles.statItem}><TrendingUp size={22} className={styles.statIcon} /><div className={styles.statNum}><AnimatedCounter target={stats.projects_completed} suffix="+" /></div><div className={styles.statLabel}>projects_completed</div></div>
-              <div className={styles.statItem}><Users size={22} className={styles.statIcon} /><div className={styles.statNum}><AnimatedCounter target={stats.happy_clients} suffix="+" /></div><div className={styles.statLabel}>happy_clients</div></div>
-              <div className={styles.statItem}><Briefcase size={22} className={styles.statIcon} /><div className={styles.statNum}><AnimatedCounter target={stats.years_experience} suffix="+" /></div><div className={styles.statLabel}>years_experience</div></div>
-              <div className={styles.statItem}><Code2 size={22} className={styles.statIcon} /><div className={styles.statNum}><AnimatedCounter target={stats.technologies} suffix="+" /></div><div className={styles.statLabel}>technologies</div></div>
+              <div className={styles.statItem}>
+                <TrendingUp size={22} className={styles.statIcon} />
+                <div className={styles.statNum}><AnimatedCounter target={stats.projects_completed} suffix="+" /></div>
+                <div className={styles.statLabel}>Projects Completed</div>
+              </div>
+              <div className={styles.statItem}>
+                <Users size={22} className={styles.statIcon} />
+                <div className={styles.statNum}><AnimatedCounter target={stats.happy_clients} suffix="+" /></div>
+                <div className={styles.statLabel}>Happy Clients</div>
+              </div>
+              <div className={styles.statItem}>
+                <Briefcase size={22} className={styles.statIcon} />
+                <div className={styles.statNum}><AnimatedCounter target={stats.years_experience} suffix="+" /></div>
+                <div className={styles.statLabel}>Years Experience</div>
+              </div>
+              <div className={styles.statItem}>
+                <Code2 size={22} className={styles.statIcon} />
+                <div className={styles.statNum}><AnimatedCounter target={stats.technologies} suffix="+" /></div>
+                <div className={styles.statLabel}>Technologies</div>
+              </div>
             </div>
           </div>
         </section>
@@ -188,7 +285,7 @@ export default function Home() {
               <div key={s.id} className={styles.srvCard} style={{ animationDelay: `${i * 0.08}s` }}>
                 {s.photo_url ? (
                   <div className={styles.srvImgWrap}>
-                    <img src={`${API}${s.photo_url}`} alt={s.title} className={styles.srvImg} />
+                    <img src={s.photo_url} alt={s.title} className={styles.srvImg} />
                     <div className={styles.srvImgOverlay} />
                   </div>
                 ) : (
@@ -236,7 +333,10 @@ export default function Home() {
                   {PROCESS_STEPS.map(({ num, title, desc }) => (
                     <div key={num} className={styles.pStep}>
                       <div className={styles.pNum}>{num}</div>
-                      <div><div className={styles.pStepTitle}>{title}</div><div className={styles.pStepDesc}>{desc}</div></div>
+                      <div>
+                        <div className={styles.pStepTitle}>{title}</div>
+                        <div className={styles.pStepDesc}>{desc}</div>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -253,10 +353,19 @@ export default function Home() {
             <div>
               <div className={styles.secLabel}>Why Choose Us</div>
               <h2 className={styles.secTitle}>We Don't Just Code.<br />We Engineer Solutions.</h2>
-              <p className={styles.secSub} style={{ marginBottom: '32px' }}>Every project is treated like our own startup. Quality, performance, and real business value — every time.</p>
+              <p className={styles.secSub} style={{ marginBottom: '32px' }}>
+                Every project is treated like our own startup. Quality, performance, and real business value — every time.
+              </p>
               <div className={styles.whyChecks}>
-                {['Clean, documented, maintainable code — always', 'On-time delivery with full transparent communication', 'AI-first problem solving for maximum efficiency', 'Scalable architecture designed from day one', 'Remote & worldwide — available in your timezone'].map(text => (
-                  <div key={text} className={styles.wcItem}><div className={styles.wcCheck}>✓</div><div className={styles.wcText}>{text}</div></div>
+                {['Clean, documented, maintainable code — always',
+                  'On-time delivery with full transparent communication',
+                  'AI-first problem solving for maximum efficiency',
+                  'Scalable architecture designed from day one',
+                  'Remote & worldwide — available in your timezone'].map(text => (
+                  <div key={text} className={styles.wcItem}>
+                    <div className={styles.wcCheck}>✓</div>
+                    <div className={styles.wcText}>{text}</div>
+                  </div>
                 ))}
               </div>
               <div style={{ marginTop: '36px', display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
@@ -270,11 +379,17 @@ export default function Home() {
                 <div className={styles.priceBig}>$20<span>/hr</span></div>
                 <p className={styles.priceNote}>Starting rate · Transparent pricing · No surprises</p>
                 <div className={styles.priceList}>
-                  {['Free initial consultation', 'Fixed-price projects available', 'Flexible engagement models', 'Money-back guarantee on milestones', '24/7 communication & support'].map(item => (
-                    <div key={item} className={styles.priceItem}><span className={styles.piCheck}>✓</span> {item}</div>
+                  {['Free initial consultation', 'Fixed-price projects available',
+                    'Flexible engagement models', 'Money-back guarantee on milestones',
+                    '24/7 communication & support'].map(item => (
+                    <div key={item} className={styles.priceItem}>
+                      <span className={styles.piCheck}>✓</span> {item}
+                    </div>
                   ))}
                 </div>
-                <Link to="/contact" className={styles.btnGold} style={{ width: '100%', justifyContent: 'center' }}>Get Free Estimate →</Link>
+                <Link to="/contact" className={styles.btnGold} style={{ width: '100%', justifyContent: 'center' }}>
+                  Get Free Estimate →
+                </Link>
               </div>
             </div>
           </div>
@@ -286,17 +401,25 @@ export default function Home() {
         <section className={`section ${styles.testi}`}>
           <div className="container">
             <div className={styles.sectionHead}>
-              <div><div className={styles.secLabel}>Client Feedback</div><h2 className={styles.secTitle}>What Our Clients Say</h2></div>
+              <div>
+                <div className={styles.secLabel}>Client Feedback</div>
+                <h2 className={styles.secTitle}>What Our Clients Say</h2>
+              </div>
               <Link to="/testimonials" className={styles.btnGhost}>All Reviews →</Link>
             </div>
             <div className={styles.testiGrid}>
               {testimonials.map(t => (
                 <div key={t.id} className={styles.tc}>
-                  <div className={styles.tcStars}>{[...Array(t.rating)].map((_, i) => <Star key={i} size={13} fill={GOLD} color={GOLD} />)}</div>
+                  <div className={styles.tcStars}>
+                    {[...Array(t.rating || 5)].map((_, i) => <Star key={i} size={13} fill={GOLD} color={GOLD} />)}
+                  </div>
                   <p className={styles.tcText}>"{t.text}"</p>
                   <div className={styles.tcAuthor}>
-                    <div className={styles.tcAv}>{t.avatar}</div>
-                    <div><div className={styles.tcName}>{t.name}</div><div className={styles.tcRole}>{t.role}</div></div>
+                    <div className={styles.tcAv}>{t.avatar || t.name?.slice(0,2).toUpperCase()}</div>
+                    <div>
+                      <div className={styles.tcName}>{t.name}</div>
+                      <div className={styles.tcRole}>{t.role}</div>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -305,6 +428,9 @@ export default function Home() {
         </section>
       )}
 
+      {/* ── FAQ ── */}
+      <FaqSection />
+
       {/* ── CTA ── */}
       <section className={styles.ctaSec}>
         <div className="container">
@@ -312,9 +438,13 @@ export default function Home() {
             <div className={styles.ctaGlow} />
             <span className={styles.ctaBracketL}>{'{'}</span>
             <span className={styles.ctaBracketR}>{'}'}</span>
-            <div className={styles.ctaEyebrow}><span className={styles.eyebrowDot} /> Free Consultation Available</div>
+            <div className={styles.ctaEyebrow}>
+              <span className={styles.eyebrowDot} /> Free Consultation Available
+            </div>
             <h2 className={styles.ctaTitle}>Ready to <em>Automate</em> &<br />Grow Your Business?</h2>
-            <p className={styles.ctaSub}>Let's discuss your project. Free consultation, clear timeline, transparent pricing — no commitment required.</p>
+            <p className={styles.ctaSub}>
+              Let's discuss your project. Free consultation, clear timeline, transparent pricing — no commitment required.
+            </p>
             <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap', position: 'relative' }}>
               <Link to="/contact" className={styles.btnGold}>Start a Conversation →</Link>
               <Link to="/services" className={styles.btnGhost}>View Our Services</Link>
