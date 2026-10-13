@@ -10,7 +10,7 @@ import Contact      from './pages/Contact'
 import Portfolio    from './pages/Portfolio'
 import Expertise    from './pages/Expertise'
 import Blog         from './pages/Blog'
-import BlogPost     from './pages/BlogPost'
+import CaseStudy    from './pages/CaseStudy'
 import ServicesAdmin from './pages/ServicesAdmin'
 
 function ScrollToTop() {
@@ -43,7 +43,7 @@ export default function App() {
                 <Route path="/portfolio"    element={<Portfolio />}    />
                 <Route path="/expertise"    element={<Expertise />}    />
                 <Route path="/blog"         element={<Blog />}         />
-                <Route path="/blog/:slug"   element={<BlogPost />}     />
+                <Route path="/work/:slug"   element={<CaseStudy />}    />
                 <Route path="/contact"      element={<Contact />}      />
               </Routes>
             </main>
