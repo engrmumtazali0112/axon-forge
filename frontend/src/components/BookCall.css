@@ -1,0 +1,52 @@
+﻿.bc-wrap { text-align: center; margin: 32px 0; }
+
+.bc-divider {
+  position: relative; text-align: center; margin: 0 0 28px;
+}
+.bc-divider::before {
+  content: ''; position: absolute; left: 0; right: 0; top: 50%;
+  height: 1px; background: var(--line, #dbe9f5);
+}
+.bc-divider span {
+  position: relative; display: inline-block; padding: 0 16px;
+  background: var(--surface, #fff);
+  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+  font-weight: 600; letter-spacing: 0.14em; color: var(--muted, #7b8494);
+}
+
+.bc-btn {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 16px 32px; border-radius: 999px;
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem;
+  text-decoration: none; transition: all 0.25s ease;
+  box-shadow: 0 10px 24px rgba(11,18,32,0.18);
+}
+.bc-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(11,18,32,0.28);
+}
+
+/* Default dark button */
+.bc-btn-primary {
+  background: #0b1220; color: #fff;
+}
+.bc-btn-primary:hover { background: #131b2c; }
+
+/* Gold variant */
+.bc-btn-gold {
+  background: #F5A623; color: #0b1220;
+  box-shadow: 0 10px 24px rgba(245,166,35,0.35);
+}
+.bc-btn-gold:hover { background: #ffb93d; box-shadow: 0 16px 32px rgba(245,166,35,0.45); }
+
+/* Blue variant */
+.bc-btn-blue {
+  background: #2E9BD6; color: #fff;
+}
+.bc-btn-blue:hover { background: #1f7fb8; }
+
+.bc-sub {
+  margin: 18px 0 0;
+  font-size: 0.95rem; color: var(--muted, #7b8494);
+  line-height: 1.6;
+}

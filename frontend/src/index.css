@@ -1,8 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap');
 
 /* ═══════════════════════════════════════════════════════════════
-   AXON FORGE — index.css  (complete light theme)
-   Replace your whole src/index.css with this file.
+   AXON FORGE — index.css  (light + dark)
    ═══════════════════════════════════════════════════════════════ */
 
 *, *::before, *::after {
@@ -11,67 +10,96 @@
   padding: 0;
 }
 
-/* ── Design tokens ─────────────────────────────────────────────── */
+/* ── Tokens ────────────────────────────────────────────────────── */
 :root {
   /* Surfaces */
-  --bg:        #ffffff;
-  --bg-soft:   #f2f8fd;   /* alternate sections, footer */
-  --line:      #dbe9f5;   /* borders and dividers */
+  --bg:            #ffffff;
+  --bg-soft:       #f2f8fd;
+  --bg-muted:      #f1f5f9;
+  --line:          #dbe9f5;
 
   /* Text */
-  --ink:       #0b1220;   /* headings */
-  --text:      #4a5568;   /* body copy */
-  --muted:     #7b8494;   /* captions, placeholders */
+  --ink:           #0b1220;
+  --text:          #4a5568;
+  --muted:         #7b8494;
+  --text-soft:     #94a3b8;
 
   /* Brand */
-  --blue:      #2e9bd6;   /* brand blue (darkened for contrast on white) */
-  --blue-soft: #e8f4fb;
-  --gold:      #f5a623;   /* brand gold: buttons, fills */
-  --gold-deep: #1f7fb8;   /* accent TEXT: deep logo blue (two-colour theme) */
-  --gold-soft: #fff4de;
-  color-scheme: light only;
+  --blue:          #2e9bd6;
+  --blue-soft:     #e8f4fb;
+  --gold:          #f5a623;
+  --gold-deep:     #1f7fb8;
+  --gold-soft:     #fff4de;
+
+  /* Extras */
+  --surface:       #ffffff;
+  --surface-hover: #f2f8fd;
+  --border:        var(--line);
+  --border-soft:   #e6eaf0;
+  --text-body:     var(--text);
+  --accent:        var(--blue);
+  --accent-hover:  #1f7fb8;
+  --accent-soft:   var(--blue-soft);
+  --accent-gold:   var(--gold);
 
   /* Type */
   --font-display: 'Syne', sans-serif;
   --font-body:    'DM Sans', sans-serif;
   --font-mono:    'JetBrains Mono', monospace;
 
-  /* Shape and motion */
+  /* Shape + motion */
   --radius:      12px;
   --radius-lg:   20px;
   --shadow-card: 0 10px 30px rgba(11, 18, 32, 0.08);
   --shadow-glow: 0 10px 30px rgba(46, 155, 214, 0.12);
   --transition:  0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* ── Legacy aliases ──────────────────────────────────────────
-     Older components still reference the dark-theme variable names.
-     Pointing them at the light values turns those components white
-     without editing every file. */
-  --bg-primary:    var(--bg);
-  --bg-secondary:  var(--bg-soft);
-  --bg-card:       #ffffff;
-  --bg-card-hover: var(--bg-soft);
-  --accent-cyan:   var(--blue);
-  --accent-blue:   #1f7fb8;
-  --accent-glow:   rgba(46, 155, 214, 0.12);
-  --text-primary:  var(--ink);
-  --text-secondary: var(--text);
-  --text-muted:    var(--muted);
-  --border:        var(--line);
-  --border-hover:  rgba(46, 155, 214, 0.45);
+  color-scheme: light;
+}
+
+/* ── Dark mode ─────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --bg:            #0a0e1a;
+  --bg-soft:       #111827;
+  --bg-muted:      #1e293b;
+  --line:          #262f45;
+
+  --ink:           #f1f5f9;
+  --text:          #cbd5e1;
+  --muted:         #94a3b8;
+  --text-soft:     #64748b;
+
+  --blue:          #5BB8E8;
+  --blue-soft:     #1e3a52;
+  --gold:          #F5A623;
+  --gold-deep:     #7fc9f0;
+  --gold-soft:     #2a1f0e;
+
+  --surface:       #151b2b;
+  --surface-hover: #1c2438;
+  --border:        #262f45;
+  --border-soft:   #1e2638;
+  --text-body:     #cbd5e1;
+  --accent:        #5BB8E8;
+  --accent-hover:  #7fc9f0;
+  --accent-soft:   #1e3a52;
+
+  --shadow-card:   0 10px 30px rgba(0, 0, 0, 0.4);
+  --shadow-glow:   0 10px 30px rgba(91, 184, 232, 0.15);
+
+  color-scheme: dark;
 }
 
 /* ── Base ──────────────────────────────────────────────────────── */
 html {
-  color-scheme: light only;
   scroll-behavior: smooth;
   background: var(--bg);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
   font-family: var(--font-body);
   background-color: var(--bg);
-  /* faint graph-paper grid, visible wherever a section has no solid fill */
   background-image:
     linear-gradient(to right, rgba(46, 155, 214, 0.05) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(46, 155, 214, 0.05) 1px, transparent 1px);
@@ -80,6 +108,13 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.2s ease;
+}
+
+[data-theme="dark"] body {
+  background-image:
+    linear-gradient(to right, rgba(91, 184, 232, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(91, 184, 232, 0.05) 1px, transparent 1px);
 }
 
 #root { min-height: 100vh; background: transparent; }
@@ -90,24 +125,18 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 ::selection { background: var(--gold); color: var(--ink); }
 
-/* Scrollbar */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg-soft); }
 ::-webkit-scrollbar-thumb { background: #c9d2de; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--blue); }
 
-/* Visible keyboard focus everywhere */
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
 
-/* ── Utility classes ───────────────────────────────────────────── */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
+/* ── Utilities ─────────────────────────────────────────────────── */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-.section    { padding: 100px 0; }
-.section-sm { padding: 60px 0; }
+.section      { padding: 100px 0; }
+.section-sm   { padding: 60px 0; }
 .section-soft { background: var(--bg-soft); }
 
 .section-title {
@@ -127,75 +156,44 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 .label {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--blue);
-  margin-bottom: 16px;
+  display: inline-flex; align-items: center; gap: 12px;
+  font-size: 0.9rem; font-weight: 700; color: var(--blue); margin-bottom: 16px;
 }
-.label::before {
-  content: '';
-  display: block;
-  width: 32px;
-  height: 2px;
-  background: var(--blue);
-  border-radius: 2px;
-}
+.label::before { content: ''; display: block; width: 32px; height: 2px; background: var(--blue); border-radius: 2px; }
 
 .gradient-text { color: var(--gold-deep); }
 
-/* Buttons */
+/* ── Buttons ───────────────────────────────────────────────────── */
 .btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  display: inline-flex; align-items: center; gap: 8px;
   padding: 12px 28px;
-  font-family: var(--font-display);
-  font-size: 0.9rem;
-  font-weight: 700;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: all var(--transition);
-  text-decoration: none;
+  font-family: var(--font-display); font-size: 0.9rem; font-weight: 700;
+  border-radius: 8px; border: none; cursor: pointer;
+  transition: all var(--transition); text-decoration: none;
 }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-.btn-primary {
-  background: var(--gold);
-  color: var(--ink);
-}
+.btn-primary { background: var(--gold); color: var(--ink); }
 .btn-primary:hover:not(:disabled) {
-  background: #ffb93d;
-  transform: translateY(-2px);
+  background: #ffb93d; transform: translateY(-2px);
   box-shadow: 0 10px 24px rgba(245, 166, 35, 0.35);
 }
 
-.btn-outline,
-.btn-secondary {
-  background: #ffffff;
-  color: var(--ink);
-  border: 1.5px solid var(--line);
+.btn-outline, .btn-secondary {
+  background: var(--surface); color: var(--ink); border: 1.5px solid var(--line);
 }
-.btn-outline:hover,
-.btn-secondary:hover {
-  border-color: var(--blue);
-  color: var(--blue);
-  transform: translateY(-2px);
+.btn-outline:hover, .btn-secondary:hover {
+  border-color: var(--blue); color: var(--blue); transform: translateY(-2px);
 }
 
-/* Cards */
-.card,
-.glass {
-  background: #ffffff;
+/* ── Cards ─────────────────────────────────────────────────────── */
+.card, .glass {
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   padding: 32px;
   transition: all var(--transition);
-  position: relative;
-  overflow: hidden;
+  position: relative; overflow: hidden;
 }
 .card:hover {
   border-color: var(--blue);
@@ -203,11 +201,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
   box-shadow: var(--shadow-glow);
 }
 
-/* Generic form field (used by older pages) */
+/* ── Forms ─────────────────────────────────────────────────────── */
 .form-input {
-  width: 100%;
-  padding: 12px 16px;
-  background: #ffffff;
+  width: 100%; padding: 12px 16px;
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 10px;
   color: var(--ink);
@@ -221,32 +218,19 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 /* ── Keyframes ─────────────────────────────────────────────────── */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-12px); }
-}
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 16px rgba(245, 166, 35, 0.25); }
   50%      { box-shadow: 0 0 36px rgba(245, 166, 35, 0.5); }
 }
-@keyframes gradient-shift {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
 
 .animate-fade-up { animation: fadeInUp 0.7s ease forwards; }
 
-/* ── Responsive ────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .section { padding: 70px 0; }
   .container { padding: 0 16px; }
 }
-
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {
