@@ -18,3 +18,5 @@ dist/
 frontend/dist/
 venv/
 .venv/
+
+.vscode/
