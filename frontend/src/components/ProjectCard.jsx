@@ -20,10 +20,16 @@ export default function ProjectCard({ project }) {
         aria-label={project.title}
       >
         {project.cover ? (
-          <img src={project.cover} alt={project.title} loading="lazy" />
-        ) : (
-          <span className="pc-image-fallback">{project.title.charAt(0)}</span>
-        )}
+          <img
+            src={project.cover}
+            alt={project.title}
+            loading="lazy"
+            onError={(e) => { e.currentTarget.style.display = 'none' }}
+          />
+        ) : null}
+        <span className="pc-image-fallback" aria-hidden="true">
+          {project.title.charAt(0)}
+        </span>
       </a>
 
       <div className="pc-body">
