@@ -1,21 +1,9 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
-import { getServices } from '../api'
+import ServicesSection from '../components/ServicesSection'
 import styles from './Services.module.css'
 
 export default function Services() {
-  const [services, setServices] = useState([])
-  const [loading,  setLoading]  = useState(true)
-  const [error,    setError]    = useState(false)
-
-  useEffect(() => {
-    getServices()
-      .then(r => setServices(r.data.services || []))
-      .catch(() => setError(true))
-      .finally(() => setLoading(false))
-  }, [])
-
   return (
     <div>
       {/* ── Hero ── */}
@@ -45,43 +33,8 @@ export default function Services() {
         </div>
       </section>
 
-      {/* ── Services Grid ── */}
-      <section className={styles.servicesSection}>
-        <div className="container">
-          <div className={styles.sectionHead}>
-            <div className={styles.secLabel}>Our Expertise</div>
-            <h2 className={styles.secTitle}>Services We Provide</h2>
-            <p>End-to-end development solutions tailored for startups and growing businesses.</p>
-          </div>
-
-          {loading && (
-            <div className={styles.loading}>
-              <div className={styles.spinner} />
-              <p>Loading services…</p>
-            </div>
-          )}
-
-          {error && !loading && (
-            <div className={styles.errorBox}>
-              <p>⚠️ Could not load services. Please try again later.</p>
-            </div>
-          )}
-
-          {!loading && !error && services.length === 0 && (
-            <div className={styles.emptyBox}>
-              <p>No services added yet. Check back soon.</p>
-            </div>
-          )}
-
-          {!loading && services.length > 0 && (
-            <div className={styles.servicesGrid}>
-              {services.map((s, i) => (
-                <ServiceCard key={s.id} service={s} index={i} />
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+      {/* ── Services (sticky stacked cards) ── */}
+      <ServicesSection />
 
       {/* ── Process ── */}
       <section className={styles.processSection}>
@@ -126,37 +79,6 @@ export default function Services() {
           </div>
         </div>
       </section>
-    </div>
-  )
-}
-
-/* ── Service Card ─────────────────────────────────────────── */
-function ServiceCard({ service: s, index: i }) {
-  // photo_url is already a full URL from api.js
-  const imgSrc = s.photo_url || null
-
-  return (
-    <div className={styles.serviceCard} style={{ animationDelay: `${i * 0.07}s` }}>
-      {imgSrc ? (
-        <div className={styles.cardImage}>
-          <img src={imgSrc} alt={s.title} />
-          <div className={styles.imgOverlay} />
-        </div>
-      ) : (
-        <div className={styles.cardPlaceholder}>
-          <span className={styles.placeholderNum}>{String(i + 1).padStart(2, '0')}</span>
-        </div>
-      )}
-
-      <div className={styles.cardBody}>
-        <h3 className={styles.cardTitle}>{s.title}</h3>
-        <p className={styles.cardDesc}>{s.description}</p>
-        <div className={styles.cardFooter}>
-          <Link to="/contact" className={styles.cardCta}>
-            Get Started <ArrowRight size={13} />
-          </Link>
-        </div>
-      </div>
     </div>
   )
 }

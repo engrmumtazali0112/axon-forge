@@ -1,0 +1,403 @@
+/* src/components/ServicesSection.css  (Axon Forge theme) */
+
+.svc-section {
+  --svc-accent: var(--gold-deep, #1f7fb8);
+  --svc-ink: var(--ink, #0b1220);
+  --svc-body: var(--text, #4a5568);
+  --svc-line: var(--line, #dbe9f5);
+  --svc-top: 104px;            /* space under your fixed navbar */
+  --svc-card-h: min(540px, calc(100vh - 150px));
+
+  background: var(--bg-soft, #f2f8fd);
+  padding: 110px 24px 120px;
+  color: var(--svc-ink);
+  font-family: var(--font-body, "DM Sans", sans-serif);
+}
+
+.svc-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ---------- Heading ---------- */
+.svc-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.svc-head-text { max-width: 780px; }
+
+.svc-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #c47f06;
+  margin-bottom: 18px;
+}
+.svc-eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: currentColor;
+}
+
+.svc-title {
+  font-family: var(--font-display, "Syne", sans-serif);
+  font-size: clamp(2rem, 4.4vw, 3.5rem);
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0 0 18px;
+  color: var(--svc-ink);
+}
+
+.svc-sub {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--svc-body);
+  margin: 0;
+  max-width: 620px;
+}
+
+.svc-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--svc-accent);
+  white-space: nowrap;
+  padding-bottom: 6px;
+}
+.svc-all svg { transition: transform 0.2s ease; }
+.svc-all:hover svg { transform: translateX(4px); }
+
+/* ---------- Stack ---------- */
+.svc-stack { position: relative; }
+
+.svc-card-wrap {
+  position: sticky;
+  /* each card sticks a little lower than the one before: stacked-edge look */
+  top: calc(var(--svc-top) + var(--i) * 14px);
+  margin-bottom: 48px;
+}
+.svc-card-wrap:last-child { margin-bottom: 0; }
+
+.svc-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: var(--svc-card-h);
+  min-height: 440px;
+  background: #ffffff;          /* must be opaque so it covers the card below */
+  border: 1px solid var(--svc-line);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow:
+    0 -18px 40px rgba(15, 23, 42, 0.08),
+    0 24px 60px rgba(15, 23, 42, 0.1);
+}
+
+/* ---------- Left visual ---------- */
+.svc-visual {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--svc-line);
+  background-color: #fafdff;
+  background-image:
+    linear-gradient(rgba(31, 127, 184, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(31, 127, 184, 0.06) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+.svc-badge {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  z-index: 3;
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid var(--svc-line);
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: #c47f06;
+}
+
+.svc-stage {
+  position: relative;
+  flex: 1;
+  margin: 24px 24px 0;
+}
+
+.svc-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.svc-lines line {
+  stroke-width: 2;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.28;
+  transition: opacity 0.4s ease;
+}
+.svc-lines line.is-on { opacity: 0.9; }
+
+.svc-hub {
+  position: absolute;
+  left: 50%;
+  top: 49%;
+  transform: translate(-50%, -50%);
+  width: 108px;
+  height: 108px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid var(--svc-line);
+  color: var(--svc-accent);
+  font-size: 2.2rem;
+  box-shadow: 0 0 0 14px rgba(31, 127, 184, 0.06), 0 10px 30px rgba(15, 23, 42, 0.08);
+  z-index: 2;
+}
+
+/* node = tile + label, centred on its coordinates (tile is the anchor) */
+.svc-node {
+  position: absolute;
+  width: 0;
+  height: 0;
+  z-index: 2;
+}
+
+.svc-tile {
+  position: absolute;
+  left: -30px;
+  top: -30px;
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: #fff;
+  border: 1.5px solid var(--svc-line);
+  color: #94a3b8;
+  font-size: 1.35rem;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+  transition: color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+}
+
+.svc-dot {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--c);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.svc-node.is-active .svc-tile {
+  color: var(--c);
+  border-color: var(--c);
+  background: color-mix(in srgb, var(--c) 8%, #fff);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--c) 14%, transparent),
+              0 10px 24px color-mix(in srgb, var(--c) 25%, transparent);
+}
+.svc-node.is-active .svc-dot { opacity: 1; }
+
+.svc-label {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 170px;
+  line-height: 1.25;
+  pointer-events: none;
+}
+.svc-label b {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--svc-ink);
+}
+.svc-label small {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+.svc-node.above .svc-label { bottom: 38px; }
+.svc-node.below .svc-label { top: 38px; }
+
+.svc-chip {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 24px;
+  padding: 9px 18px;
+  background: #fff;
+  border: 1px solid var(--svc-line);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+.svc-chip svg { color: var(--svc-accent); }
+.svc-chip b { color: var(--svc-ink); font-weight: 700; }
+
+/* ---------- Right copy ---------- */
+.svc-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 44px 52px;
+  overflow: hidden;
+}
+
+.svc-body-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 26px;
+}
+
+.svc-name {
+  font-family: var(--font-display, "Syne", sans-serif);
+  font-size: clamp(1.6rem, 2.4vw, 2.15rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin: 0;
+  color: var(--svc-ink);
+}
+
+.svc-go {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--svc-line);
+  background: var(--bg-soft, #f2f8fd);
+  color: var(--svc-accent);
+  font-size: 0.85rem;
+  transform: rotate(-45deg);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.svc-go:hover {
+  background: var(--svc-accent);
+  color: #fff;
+  transform: rotate(0deg);
+}
+
+.svc-tagline {
+  font-family: var(--font-display, "Syne", sans-serif);
+  font-size: 1.2rem;
+  line-height: 1.4;
+  font-weight: 700;
+  color: var(--svc-accent);
+  margin: 0 0 14px;
+}
+
+.svc-desc {
+  font-size: 0.98rem;
+  line-height: 1.75;
+  color: var(--svc-body);
+  margin: 0 0 28px;
+}
+
+.svc-areas-title {
+  font-family: var(--font-display, "Syne", sans-serif);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.98rem;
+  font-weight: 700;
+  margin: 0 0 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--svc-line);
+  color: var(--svc-ink);
+}
+.svc-areas-title::before {
+  content: "";
+  width: 24px;
+  height: 2px;
+  background: #f5a623;
+}
+
+.svc-areas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.svc-areas li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 0.95rem;
+  color: var(--svc-body);
+}
+.svc-areas li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f5a623;
+}
+
+/* ---------- Responsive ---------- */
+@media screen and (max-width: 1024px) {
+  .svc-body { padding: 36px 32px; }
+  .svc-hub { width: 88px; height: 88px; font-size: 1.8rem; }
+  .svc-tile { left: -26px; top: -26px; width: 52px; height: 52px; font-size: 1.15rem; }
+  .svc-label { width: 130px; }
+  .svc-node.above .svc-label { bottom: 34px; }
+  .svc-node.below .svc-label { top: 34px; }
+}
+
+/* On phones the cards are too tall to pin, so they stack normally */
+@media screen and (max-width: 820px) {
+  .svc-section { padding: 90px 18px 80px; }
+  .svc-head { flex-direction: column; align-items: flex-start; }
+
+  .svc-card-wrap {
+    position: relative;
+    top: auto;
+    margin-bottom: 24px;
+  }
+  .svc-card {
+    grid-template-columns: 1fr;
+    height: auto;
+    border-radius: 22px;
+  }
+  .svc-visual {
+    border-right: 0;
+    border-bottom: 1px solid var(--svc-line);
+  }
+  .svc-stage { height: 380px; flex: none; }
+  .svc-body { padding: 28px 24px 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svc-tile, .svc-dot, .svc-lines line, .svc-go, .svc-all svg { transition: none; }
+}
