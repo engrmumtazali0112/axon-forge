@@ -1,35 +1,138 @@
-/**
- * src/data/projects.js
- * PLACEHOLDER PROJECTS: replace each entry with a real delivered project.
- *  - image: optional path in /public (e.g. '/portfolio/shop.jpg'); falls back to a coloured tile
- *  - url:   optional live link
- *  - results: honest, measurable outcomes only
+﻿/**
+ * Project data — single source of truth for the portfolio.
+ * Keep slugs matching the case-study pages in pages/CaseStudy.jsx.
  */
-export const INDUSTRIES = ['All', 'SaaS', 'AI & ML', 'Mobile', 'Fintech', 'E-Commerce']
+import tbbCover from '../assets/projects/tbb-home.webp'
+import luxeCover from '../assets/projects/luxe-hero.webp'
+import hostelCover from '../assets/projects/hostel-hero.webp'
+import axonCover from '../assets/projects/axon-forge-1-hero.png'
+import complaintCover from '../assets/projects/student-complaint-1-hero.png'
+import fingerprintCover from '../assets/projects/fingerprint-attendance-1-hero.png'
+import financeaiCover from '../assets/projects/financeai-1-hero.png'
+import aiVisibilityCover from '../assets/projects/ai-visibility-1-hero.png'
+import sufrahCover from '../assets/projects/sufrah-1-hero.png'
 
 export const PROJECTS = [
   {
-    title: 'Project name 1', industry: 'SaaS',
-    description: 'Describe the client problem, what you built, and the result in two or three sentences.',
-    results: [{ value: '00%', label: 'Metric one' }, { value: '0x', label: 'Metric two' }],
-    tech: ['React', 'FastAPI', 'PostgreSQL', 'AWS'], image: null, url: null,
+    slug: 'true-blue-bio',
+    title: 'True Blue Bio — Lab Supplies Store',
+    excerpt: 'A B2B lab supplies store with account pricing, bulk quotes, Stripe + Net-30 checkout, and an operations admin.',
+    cover: tbbCover,
+    categories: ['web', 'saas'],
+    industry: 'B2B SaaS',
+    year: '2026',
+    duration: '10 Months',
+    stack: ['React', 'Node.js', 'PostgreSQL', 'Stripe', 'Microsoft Teams'],
+    live: 'https://truebluebio.com',
+    source: 'https://github.com/engrmumtazali0112/true-blue-bio',
+    featured: true,
   },
   {
-    title: 'Project name 2', industry: 'AI & ML',
-    description: 'Describe the AI feature you delivered (chatbot, RAG search, vision model) and the outcome.',
-    results: [{ value: '00h', label: 'Time saved / week' }],
-    tech: ['Python', 'LangChain', 'OpenAI'], image: null, url: null,
+    slug: 'axon-forge',
+    title: 'Axon Forge — Agency Platform',
+    excerpt: 'A remote-first agency site with services, portfolio, blog and a quote workflow, on FastAPI + React.',
+    cover: axonCover,
+    categories: ['web'],
+    industry: 'Agency',
+    year: '2026',
+    duration: '8 Months',
+    stack: ['React', 'FastAPI', 'PostgreSQL', 'Tailwind', 'Vite', 'Docker'],
+    live: 'https://axon-forge.vercel.app',
+    source: 'https://github.com/engrmumtazali0112/next-tech-solutions',
   },
   {
-    title: 'Project name 3', industry: 'Mobile',
-    description: 'Describe the mobile app, platforms covered, and how users responded.',
-    results: [{ value: '0k+', label: 'Downloads' }, { value: '0.0★', label: 'Store rating' }],
-    tech: ['Flutter', 'Firebase'], image: null, url: null,
+    slug: 'sufrah',
+    title: 'Sufrah — Subscription Manager Pro',
+    excerpt: 'A 9-app restaurant and meal-subscription platform serving Islamabad & Rawalpindi — from kitchen to rider.',
+    cover: sufrahCover,
+    categories: ['web', 'mobile'],
+    industry: 'Restaurant SaaS',
+    year: '2026',
+    duration: '7 Months',
+    stack: ['React', 'Node.js', 'MongoDB', 'Stripe', 'Expo'],
+    live: 'https://workspacesufras-production.up.railway.app',
+    source: 'https://github.com/engrmumtazali0112/sufrah',
   },
   {
-    title: 'Project name 4', industry: 'Fintech',
-    description: 'Describe the payments or wallet product, the compliance work involved, and the launch result.',
-    results: [{ value: '00 days', label: 'To launch' }],
-    tech: ['Node.js', 'PostgreSQL', 'Docker'], image: null, url: null,
+    slug: 'student-complaint-system',
+    title: 'Student Complaint Management System',
+    excerpt: 'Multi-portal university complaints with status tracking, escalation and 5-star admin ratings.',
+    cover: complaintCover,
+    categories: ['web', 'mobile'],
+    industry: 'University',
+    year: '2025',
+    duration: '6 Months',
+    stack: ['Flutter', 'Django', 'PostgreSQL', 'DRF'],
+    source: 'https://github.com/engrmumtazali0112/Student-Complaint-Management-System',
   },
+  {
+    slug: 'luxe-jewelry-store',
+    title: 'Luxe Jewelry — E-Commerce',
+    excerpt: 'A full e-commerce flow for fine jewelry: collections, product gallery, cart, checkout and admin.',
+    cover: luxeCover,
+    categories: ['web'],
+    industry: 'E-Commerce',
+    year: '2024',
+    duration: '6 Months',
+    stack: ['Django', 'PostgreSQL', 'Bootstrap', 'Stripe'],
+    live: 'https://luxejewelrydesign.store',
+    source: 'https://github.com/engrmumtazali0112/Jewelry-Shop---Django-E-commerce',
+  },
+  {
+    slug: 'university-administration-system',
+    title: 'University Administration System',
+    excerpt: 'Role-based hostel, fees, mess, visitors, complaints and biometric attendance in one system.',
+    cover: hostelCover,
+    categories: ['web', 'mobile'],
+    industry: 'University',
+    year: '2025',
+    duration: '12 Months',
+    stack: ['Django', 'Bootstrap', 'PostgreSQL', 'Stripe', 'Biometric API'],
+    source: 'https://github.com/engrmumtazali0112/SmartHostelManagmentSystem_FYP',
+  },
+  {
+    slug: 'fingerprint-attendance-system',
+    title: 'Fingerprint Attendance System',
+    excerpt: 'Biometric attendance with multi-finger enrollment, per-meal check-in and CSV reporting.',
+    cover: fingerprintCover,
+    categories: ['web', 'mobile'],
+    industry: 'Biometric',
+    year: '2025',
+    duration: '2 Months',
+    stack: ['Django', 'SQLite', 'Bootstrap 5', 'Digital Persona SDK'],
+    source: 'https://github.com/engrmumtazali0112/fingerprint_attendance_system',
+  },
+  {
+    slug: 'financeai',
+    title: 'FinanceAI — Personal Finance Assistant',
+    excerpt: 'AI-driven finance companion with natural-language Q&A, receipt OCR and cost-optimised model routing.',
+    cover: financeaiCover,
+    categories: ['web', 'ai-ml'],
+    industry: 'AI · Fintech',
+    year: '2025',
+    duration: '3 Months',
+    stack: ['Next.js 14', 'TypeScript', 'Supabase', 'Claude API', 'Recharts'],
+    source: 'https://github.com/engrmumtazali0112/finance-assistant',
+  },
+  {
+    slug: 'ai-visibility',
+    title: 'AI Visibility & Search Intelligence',
+    excerpt: 'Track whether your brand appears when buyers ask ChatGPT, Claude or Perplexity.',
+    cover: aiVisibilityCover,
+    categories: ['web', 'ai-ml', 'data'],
+    industry: 'AI SaaS',
+    year: '2025',
+    duration: '3 Months',
+    stack: ['Flask', 'React', 'Claude API', 'PostgreSQL', 'Vite'],
+    source: 'https://github.com/engrmumtazali0112/AI-Visibility-Search-Intelligence-Platform',
+  },
+]
+
+export const INDUSTRIES = [
+  { id: 'all',    label: 'All projects' },
+  { id: 'web',    label: 'Web apps' },
+  { id: 'mobile', label: 'Mobile' },
+  { id: 'ai-ml',  label: 'AI / ML' },
+  { id: 'data',   label: 'Data' },
+  { id: 'saas',   label: 'SaaS' },
 ]

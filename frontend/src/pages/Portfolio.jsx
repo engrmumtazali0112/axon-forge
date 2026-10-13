@@ -1,12 +1,25 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, ExternalLink } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
+import ProjectCard from '../components/ProjectCard'
 import { PROJECTS, INDUSTRIES } from '../data/projects'
 import styles from './Content.module.css'
 
 export default function Portfolio() {
-  const [filter, setFilter] = useState('All')
-  const list = PROJECTS.filter((p) => filter === 'All' || p.industry === filter)
+  const [filter, setFilter] = useState('all')
+
+  const filtered = useMemo(() => {
+    if (filter === 'all') return PROJECTS
+    return PROJECTS.filter((p) => p.categories?.includes(filter))
+  }, [filter])
+
+  const counts = useMemo(() => {
+    const base = { all: PROJECTS.length }
+    PROJECTS.forEach((p) => {
+      (p.categories || []).forEach((c) => { base[c] = (base[c] || 0) + 1 })
+    })
+    return base
+  }, [])
 
   return (
     <main className={styles.page}>
@@ -16,11 +29,11 @@ export default function Portfolio() {
             <nav className={styles.crumbs} aria-label="Breadcrumb">
               <Link to="/">Home</Link><span>/</span><span aria-current="page">Portfolio</span>
             </nav>
-            <p className={styles.eyebrow}>Our Portfolio</p>
-            <h1 className={styles.h1}>Projects We&apos;ve <em>Delivered</em></h1>
+            <p className={styles.eyebrow}>Our work</p>
+            <h1 className={styles.h1}>Projects We&apos;ve <em>Shipped</em></h1>
             <p className={styles.lead}>
-              A selection of the products we have built for startups and growing businesses:
-              SaaS platforms, AI systems, mobile apps and cloud solutions.
+              Real products in production — SaaS platforms, e-commerce, university systems,
+              AI tools and mobile apps. Each one has a full case study.
             </p>
           </div>
         </div>
@@ -29,45 +42,34 @@ export default function Portfolio() {
       <section className={styles.section}>
         <div className="container">
           <div className={styles.toolbar}>
-            <div className={styles.chips}>
+            <div className={styles.chips} role="tablist" aria-label="Filter projects">
               {INDUSTRIES.map((c) => (
-                <button key={c} type="button" onClick={() => setFilter(c)}
-                  className={`${styles.chip} ${filter === c ? styles.chipOn : ''}`}>{c}</button>
+                <button
+                  key={c.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={filter === c.id}
+                  className={`${styles.chip} ${filter === c.id ? styles.chipOn : ''}`}
+                  onClick={() => setFilter(c.id)}
+                >
+                  {c.label}
+                  {counts[c.id] != null && (
+                    <span style={{ opacity: 0.6, marginLeft: 6 }}>{counts[c.id]}</span>
+                  )}
+                </button>
               ))}
             </div>
           </div>
 
-          {list.length === 0 ? (
+          {filtered.length === 0 ? (
             <p className={styles.empty}>No projects in this category yet.</p>
           ) : (
-            <div className={styles.pGrid}>
-              {list.map((p, i) => (
-                <article key={p.title} className={styles.project}>
-                  <div className={`${styles.shot} ${i % 2 ? styles.shotGold : styles.shotBlue}`}>
-                    {p.image
-                      ? <img src={p.image} alt={p.title} className={styles.shotImg} loading="lazy" />
-                      : <span className={styles.shotLetter}>{p.title.charAt(0)}</span>}
-                  </div>
-                  <div className={styles.pBody}>
-                    <p className={styles.pIndustry}>{p.industry}</p>
-                    <h2 className={styles.pTitle}>{p.title}</h2>
-                    <p className={styles.pDesc}>{p.description}</p>
-                    {p.results?.length > 0 && (
-                      <div className={styles.results}>
-                        {p.results.map((r) => (
-                          <div key={r.label} className={styles.res}><b>{r.value}</b><span>{r.label}</span></div>
-                        ))}
-                      </div>
-                    )}
-                    <div className={styles.tags}>{p.tech.map((t) => <span key={t} className={styles.tag}>{t}</span>)}</div>
-                    {p.url && (
-                      <a href={p.url} target="_blank" rel="noreferrer" className={styles.pLink}>
-                        Visit project <ExternalLink size={14} />
-                      </a>
-                    )}
-                  </div>
-                </article>
-              ))}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+              gap: 24,
+            }}>
+              {filtered.map((p) => <ProjectCard key={p.slug} project={p} />)}
             </div>
           )}
         </div>
@@ -78,9 +80,11 @@ export default function Portfolio() {
           <div className={styles.cta}>
             <div>
               <h2>Want results like these?</h2>
-              <p>Tell us about your project and get a clear plan and quote within 24 hours.</p>
+              <p>Tell us about your project — we reply within 24 hours.</p>
             </div>
-            <Link to="/contact" className={styles.btnGold}>Get a Quote <ArrowRight size={16} /></Link>
+            <Link to="/contact" className={styles.btnGold}>
+              Get a Quote <ArrowRight size={16} />
+            </Link>
           </div>
         </div>
       </section>
