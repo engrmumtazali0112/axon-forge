@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Check, Mail, MapPin, Clock, Loader2 } from 'lucide-react'
+import { ArrowRight, Check, Mail, MapPin, Clock, Loader2, CalendarDays } from 'lucide-react'
 import { submitContact } from '../api'
 import styles from './Contact.module.css'
 
@@ -192,9 +192,25 @@ export default function Contact() {
                   <span className={styles.reply}><Check size={15} /> We reply within 24 hours.</span>
                 </div>
 
-                <p className={styles.fine}>
+                                <p className={styles.fine}>
                   By sending this you agree to our privacy policy. We never share your details or
                   add you to a mailing list.
+                </p>
+
+                <div className={styles.orDivider}><span>OR</span></div>
+
+                <a
+                  href="https://calendly.com/engrmumtazali01"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.bookCallBtn}
+                >
+                  <CalendarDays size={18} />
+                  Book a Free 30-min Call
+                  <ArrowRight size={18} />
+                </a>
+                <p className={styles.bookCallSub}>
+                  Prefer to talk? Book a free 30-minute Google Meet consultation.
                 </p>
               </form>
             )}

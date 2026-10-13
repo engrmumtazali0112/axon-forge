@@ -1,23 +1,22 @@
 ﻿/**
- * Project data — single source of truth for the portfolio.
- * Keep slugs matching the case-study pages in pages/CaseStudy.jsx.
+ * Project data — portfolio grid. Images imported at build time.
  */
-import tbbCover from '../assets/projects/tbb-home.webp'
-import luxeCover from '../assets/projects/luxe-hero.webp'
-import hostelCover from '../assets/projects/hostel-hero.webp'
-import axonCover from '../assets/projects/axon-forge-1-hero.png'
-import complaintCover from '../assets/projects/student-complaint-1-hero.png'
-import fingerprintCover from '../assets/projects/fingerprint-attendance-1-hero.png'
-import financeaiCover from '../assets/projects/financeai-1-hero.png'
-import aiVisibilityCover from '../assets/projects/ai-visibility-1-hero.png'
-import sufrahCover from '../assets/projects/sufrah-1-hero.png'
+import tbbHome   from '../assets/projects/tbb-home.webp'
+import axonHero  from '../assets/projects/axon-forge-1-hero.png'
+import sufrahHero from '../assets/projects/sufrah-1-hero.png'
+import complaintHero from '../assets/projects/student-complaint-1-hero.png'
+import luxeHero  from '../assets/projects/luxe-hero.webp'
+import hostelHero from '../assets/projects/hostel-hero.webp'
+import fingerprintHero from '../assets/projects/fingerprint-attendance-1-hero.png'
+import financeHero from '../assets/projects/financeai-1-hero.png'
+import aiVisHero from '../assets/projects/ai-visibility-1-hero.png'
 
 export const PROJECTS = [
   {
     slug: 'true-blue-bio',
     title: 'True Blue Bio — Lab Supplies Store',
     excerpt: 'A B2B lab supplies store with account pricing, bulk quotes, Stripe + Net-30 checkout, and an operations admin.',
-    cover: tbbCover,
+    cover: tbbHome,
     categories: ['web', 'saas'],
     industry: 'B2B SaaS',
     year: '2026',
@@ -31,7 +30,7 @@ export const PROJECTS = [
     slug: 'axon-forge',
     title: 'Axon Forge — Agency Platform',
     excerpt: 'A remote-first agency site with services, portfolio, blog and a quote workflow, on FastAPI + React.',
-    cover: axonCover,
+    cover: axonHero,
     categories: ['web'],
     industry: 'Agency',
     year: '2026',
@@ -44,7 +43,7 @@ export const PROJECTS = [
     slug: 'sufrah',
     title: 'Sufrah — Subscription Manager Pro',
     excerpt: 'A 9-app restaurant and meal-subscription platform serving Islamabad & Rawalpindi — from kitchen to rider.',
-    cover: sufrahCover,
+    cover: sufrahHero,
     categories: ['web', 'mobile'],
     industry: 'Restaurant SaaS',
     year: '2026',
@@ -57,7 +56,7 @@ export const PROJECTS = [
     slug: 'student-complaint-system',
     title: 'Student Complaint Management System',
     excerpt: 'Multi-portal university complaints with status tracking, escalation and 5-star admin ratings.',
-    cover: complaintCover,
+    cover: complaintHero,
     categories: ['web', 'mobile'],
     industry: 'University',
     year: '2025',
@@ -69,7 +68,7 @@ export const PROJECTS = [
     slug: 'luxe-jewelry-store',
     title: 'Luxe Jewelry — E-Commerce',
     excerpt: 'A full e-commerce flow for fine jewelry: collections, product gallery, cart, checkout and admin.',
-    cover: luxeCover,
+    cover: luxeHero,
     categories: ['web'],
     industry: 'E-Commerce',
     year: '2024',
@@ -82,7 +81,7 @@ export const PROJECTS = [
     slug: 'university-administration-system',
     title: 'University Administration System',
     excerpt: 'Role-based hostel, fees, mess, visitors, complaints and biometric attendance in one system.',
-    cover: hostelCover,
+    cover: hostelHero,
     categories: ['web', 'mobile'],
     industry: 'University',
     year: '2025',
@@ -94,7 +93,7 @@ export const PROJECTS = [
     slug: 'fingerprint-attendance-system',
     title: 'Fingerprint Attendance System',
     excerpt: 'Biometric attendance with multi-finger enrollment, per-meal check-in and CSV reporting.',
-    cover: fingerprintCover,
+    cover: fingerprintHero,
     categories: ['web', 'mobile'],
     industry: 'Biometric',
     year: '2025',
@@ -106,7 +105,7 @@ export const PROJECTS = [
     slug: 'financeai',
     title: 'FinanceAI — Personal Finance Assistant',
     excerpt: 'AI-driven finance companion with natural-language Q&A, receipt OCR and cost-optimised model routing.',
-    cover: financeaiCover,
+    cover: financeHero,
     categories: ['web', 'ai-ml'],
     industry: 'AI · Fintech',
     year: '2025',
@@ -118,7 +117,7 @@ export const PROJECTS = [
     slug: 'ai-visibility',
     title: 'AI Visibility & Search Intelligence',
     excerpt: 'Track whether your brand appears when buyers ask ChatGPT, Claude or Perplexity.',
-    cover: aiVisibilityCover,
+    cover: aiVisHero,
     categories: ['web', 'ai-ml', 'data'],
     industry: 'AI SaaS',
     year: '2025',

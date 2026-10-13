@@ -1,0 +1,80 @@
+/* ═══ Dark-mode overrides ═══ */
+
+/* Navbar */
+[data-theme="dark"] nav[class*="nav"] {
+  background: var(--bg);
+  border-bottom-color: var(--line);
+}
+[data-theme="dark"] nav[class*="nav"] a { color: var(--text); }
+
+/* Generic white cards */
+[data-theme="dark"] .card,
+[data-theme="dark"] .glass,
+[data-theme="dark"] [class*="card"]:not([class*="card-"]):not([class*="Card"]) {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+/* Section backgrounds that are hardcoded to white */
+[data-theme="dark"] main,
+[data-theme="dark"] section {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+/* Form fields */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background: var(--bg-muted);
+  border-color: var(--border);
+  color: var(--text);
+}
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: var(--text-soft);
+}
+
+/* Footer */
+[data-theme="dark"] footer {
+  background: var(--bg-soft);
+  border-top-color: var(--line);
+  color: var(--text-body);
+}
+
+/* Hero decorations on Home */
+[data-theme="dark"] [class*="hero"] {
+  background-color: var(--bg);
+}
+[data-theme="dark"] [class*="heroBg"]::before {
+  filter: invert(1) hue-rotate(180deg);
+  opacity: 0.3;
+}
+
+/* Services cards */
+[data-theme="dark"] [class*="srvCard"],
+[data-theme="dark"] [class*="serviceCard"],
+[data-theme="dark"] [class*="ss-card"],
+[data-theme="dark"] [class*="pc-card"] {
+  background: var(--surface);
+  border-color: var(--border);
+}
+[data-theme="dark"] [class*="srvDesc"],
+[data-theme="dark"] [class*="serviceDesc"],
+[data-theme="dark"] [class*="ss-desc"],
+[data-theme="dark"] [class*="pc-desc"] {
+  color: var(--text-body);
+}
+
+/* Project / Portfolio */
+[data-theme="dark"] [class*="chip"],
+[data-theme="dark"] [class*="pill"] {
+  background: var(--bg-muted);
+  border-color: var(--border);
+  color: var(--text-body);
+}
+[data-theme="dark"] [class*="chipOn"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0a0e1a;
+}

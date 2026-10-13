@@ -1,20 +1,18 @@
 import { useState, useEffect } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import { Menu, X, ArrowRight } from 'lucide-react'
+import ThemeToggle from './ThemeToggle'
 import styles from './Navbar.module.css'
 
 const NAV_LINKS = [
-
   { to: '/services',     label: 'Services'     },
   { to: '/portfolio',    label: 'Portfolio'    },
   { to: '/expertise',    label: 'Expertise'    },
-  { to: '/about',        label: 'About Us'        },
+  { to: '/about',        label: 'About Us'     },
   { to: '/blog',         label: 'Blog'         },
   { to: '/testimonials', label: 'Testimonials' },
-
 ]
 
-/* Logo colours — slightly deeper than the dark-theme values so they read on white */
 const BLUE = '#2E9BD6'
 const GOLD = '#F5A623'
 
@@ -31,7 +29,7 @@ function LogoMark() {
   )
 }
 
-export default function Navbar() {
+export default function Navbar({ theme, onToggleTheme }) {
   const [open, setOpen]         = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -67,6 +65,8 @@ export default function Navbar() {
           ))}
         </ul>
 
+        <ThemeToggle theme={theme} onToggle={onToggleTheme} />
+
         <Link to="/contact" className={styles.cta}>
           Get a quote <ArrowRight size={14} />
         </Link>
@@ -95,6 +95,11 @@ export default function Navbar() {
             </NavLink>
           ))}
         </div>
+
+        <div style={{ padding: '8px 20px 0' }}>
+          <ThemeToggle theme={theme} onToggle={onToggleTheme} />
+        </div>
+
         <Link to="/contact" className={styles.mobileCta} onClick={() => setOpen(false)}>
           Get a quote
         </Link>
