@@ -2,7 +2,7 @@
 .sh-section {
   position: relative;
   padding: 110px 24px 90px;
-  background: #ffffff;
+  background: var(--surface);
   overflow: hidden;
   border-bottom: 1px solid var(--line, #dbe9f5);
 }
@@ -58,7 +58,7 @@
   display: inline-flex; align-items: center; gap: 9px;
   padding: 14px 28px; border-radius: 10px;
   font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.92rem;
-  color: var(--ink, #0b1220); background: #fff; border: 1.5px solid var(--line, #dbe9f5);
+  color: var(--ink, #0b1220); background: var(--surface); border: 1.5px solid var(--line, #dbe9f5);
   text-decoration: none; transition: all 0.22s;
 }
 .sh-btn-ghost:hover { border-color: #2E9BD6; color: #2E9BD6; }

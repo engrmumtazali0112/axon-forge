@@ -13,12 +13,12 @@
 .btnGhost {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 13px 26px; font-size: 0.92rem; font-weight: 600;
-  color: var(--ink); background: #fff;
+  color: var(--ink); background: var(--surface);
   border: 1.5px solid var(--line);
   border-radius: 12px; text-decoration: none; transition: all 0.22s;
   font-family: 'Syne', sans-serif;
 }
-.btnGhost:hover { border-color: #2E9BD6; color: #2E9BD6; background: #fff; }
+.btnGhost:hover { border-color: #2E9BD6; color: #2E9BD6; background: var(--surface); }
 
 .goldText { color: #F5A623; }
 .blueText { color: #2E9BD6; }
@@ -95,14 +95,14 @@
 .heroTrust {}
 .trustLabel { font-size: 0.72rem; color: var(--muted); font-family: 'JetBrains Mono', monospace; margin-bottom: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
 .trustPills { display: flex; flex-wrap: wrap; gap: 8px; }
-.pill { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--muted); background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 5px 13px; transition: all 0.2s; }
+.pill { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 5px 13px; transition: all 0.2s; }
 .pill:hover { color: #2E9BD6; border-color: #2E9BD6; }
 
 /* Hero Visual */
 .heroVisual { display: flex; flex-direction: column; gap: 18px; animation: fadeUp 0.7s 0.15s ease both; }
 
 .quoteCard {
-  background: #ffffff; border: 1px solid var(--line);
+  background: var(--surface); border: 1px solid var(--line);
   border-radius: 20px; padding: 36px; position: relative; overflow: hidden;
 }
 .quoteCard::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #F5A623, transparent); }
@@ -117,7 +117,7 @@
 
 .miniCards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .miniCard {
-  background: #ffffff; border: 1px solid var(--line);
+  background: var(--surface); border: 1px solid var(--line);
   border-radius: 14px; padding: 20px; transition: all 0.25s; position: relative; overflow: hidden;
 }
 .miniCard::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1.5px; background: linear-gradient(90deg, transparent, #F5A623, transparent); opacity: 0; transition: opacity 0.25s; }
@@ -152,7 +152,7 @@
 /* ── Services ── */
 .srvGrid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
 .srvCard {
-  background: #ffffff; border: 1px solid var(--line);
+  background: var(--surface); border: 1px solid var(--line);
   border-radius: 18px; overflow: hidden;
   transition: all 0.3s; position: relative;
   display: flex; flex-direction: column;
@@ -220,7 +220,7 @@
 .autoFeatTitle { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--ink); margin-bottom: 5px; }
 .autoFeatDesc { font-size: 0.875rem; color: var(--text); line-height: 1.6; }
 
-.processCard { background: #ffffff; border: 1px solid rgba(245,166,35,0.18); border-radius: 22px; padding: 36px; position: relative; overflow: hidden; }
+.processCard { background: var(--surface); border: 1px solid rgba(245,166,35,0.18); border-radius: 22px; padding: 36px; position: relative; overflow: hidden; }
 .processCard::after { content: ''; position: absolute; top: -80px; right: -80px; width: 240px; height: 240px; background: radial-gradient(circle, rgba(245,166,35,0.06) 0%, transparent 70%); pointer-events: none; }
 .processTitle { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--ink); margin-bottom: 28px; }
 .processSteps { display: flex; flex-direction: column; }
@@ -238,7 +238,7 @@
 .wcCheck { width: 30px; height: 30px; background: rgba(245,166,35,0.08); border: 1px solid rgba(245,166,35,0.22); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #F5A623; font-weight: 800; font-size: 0.85rem; flex-shrink: 0; }
 .wcText { font-size: 0.95rem; color: var(--text); padding-top: 5px; line-height: 1.5; }
 
-.priceCard { background: #ffffff; border: 1px solid rgba(245,166,35,0.18); border-radius: 22px; padding: 40px; position: relative; overflow: hidden; }
+.priceCard { background: var(--surface); border: 1px solid rgba(245,166,35,0.18); border-radius: 22px; padding: 40px; position: relative; overflow: hidden; }
 .priceCard::after { content: ''; position: absolute; top: -100px; right: -100px; width: 260px; height: 260px; background: radial-gradient(circle, rgba(245,166,35,0.06) 0%, transparent 70%); pointer-events: none; }
 .priceBig { font-family: 'Syne', sans-serif; font-size: 3.8rem; font-weight: 800; color: #F5A623; line-height: 1; margin: 12px 0 6px; }
 .priceBig span { font-size: 1.2rem; color: var(--muted); }
@@ -250,7 +250,7 @@
 /* ── Testimonials ── */
 .testi { background: #f2f8fd; }
 .testiGrid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
-.tc { background: #ffffff; border: 1px solid var(--line); border-radius: 18px; padding: 32px; transition: all 0.3s; position: relative; overflow: hidden; }
+.tc { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 32px; transition: all 0.3s; position: relative; overflow: hidden; }
 .tc::before { content: '"'; position: absolute; top: 10px; right: 18px; font-family: 'Syne', sans-serif; font-size: 5rem; line-height: 1; color: #F5A623; opacity: 0.06; pointer-events: none; }
 .tc:hover { border-color: rgba(245,166,35,0.2); transform: translateY(-3px); }
 .tcStars { display: flex; gap: 3px; margin-bottom: 18px; }
@@ -262,7 +262,7 @@
 
 /* ── CTA ── */
 .ctaSec { background: #f2f8fd; padding: 100px 0; }
-.ctaBox { position: relative; text-align: center; background: #ffffff; border: 1px solid rgba(245,166,35,0.2); border-radius: 24px; padding: 90px 40px; overflow: hidden; }
+.ctaBox { position: relative; text-align: center; background: var(--surface); border: 1px solid rgba(245,166,35,0.2); border-radius: 24px; padding: 90px 40px; overflow: hidden; }
 .ctaGlow { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 700px; height: 400px; background: radial-gradient(ellipse, rgba(245,166,35,0.06) 0%, transparent 70%); pointer-events: none; }
 .ctaBracketL, .ctaBracketR { position: absolute; top: 50%; transform: translateY(-50%); font-family: 'JetBrains Mono', monospace; font-size: 14rem; font-weight: 300; opacity: 0.03; line-height: 1; pointer-events: none; color: #F5A623; }
 .ctaBracketL { left: 16px; } .ctaBracketR { right: 16px; }

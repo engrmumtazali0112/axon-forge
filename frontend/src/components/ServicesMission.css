@@ -2,7 +2,7 @@
 .sm-section {
   --sm-blue: #2E9BD6;
   padding: 100px 24px;
-  background: #ffffff;
+  background: var(--surface);
   border-top: 1px solid var(--line, #dbe9f5);
 }
 .sm-wrap {
@@ -75,13 +75,13 @@
 
 .sm-dot {
   width: clamp(48px, 9vw, 68px); aspect-ratio: 1/1; display: grid; place-items: center;
-  border-radius: 50%; background: #fff; color: #2E9BD6;
+  border-radius: 50%; background: var(--surface); color: #2E9BD6;
   border: 1.5px solid #cfe7f7;
   box-shadow: 0 10px 26px rgba(46,155,214,0.18);
 }
 .sm-node b {
   padding: 4px 12px; border-radius: 999px;
-  background: #fff; border: 1px solid #e0e4f7;
+  background: var(--surface); border: 1px solid #e0e4f7;
   font-size: 0.74rem; color: var(--ink, #0b1220); font-weight: 600; white-space: nowrap;
 }
 

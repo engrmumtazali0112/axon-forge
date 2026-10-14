@@ -1,9 +1,9 @@
-﻿/* AXON FORGE — shared styles for Blog, Blog post, Expertise, Portfolio.
+/* AXON FORGE � shared styles for Blog, Blog post, Expertise, Portfolio.
    Two-colour theme: logo blue (#2E9BD6) + logo yellow (#F5A623). */
 
 .page { min-height: 100vh; }
 
-/* ── Hero ── */
+/* -- Hero -- */
 .hero {
   position: relative; padding: 80px 0 64px;
   background: var(--bg-soft); border-bottom: 1px solid var(--line); overflow: hidden;
@@ -49,7 +49,7 @@
 .sub { color: var(--text); max-width: 56ch; margin-top: 10px; line-height: 1.75; }
 .head { margin-bottom: 44px; }
 
-/* ── Buttons ── */
+/* -- Buttons -- */
 .btnGold {
   display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px;
   font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.92rem;
@@ -65,26 +65,26 @@
 }
 .btnBlue:hover { background: #1f7fb8; transform: translateY(-2px); box-shadow: 0 12px 28px rgba(46,155,214,0.35); }
 
-/* ── Filter chips / search ── */
+/* -- Filter chips / search -- */
 .toolbar { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; justify-content: space-between; margin-bottom: 36px; }
 .chips { display: flex; gap: 10px; flex-wrap: wrap; }
 .chip {
   font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; font-weight: 500;
-  padding: 8px 16px; border-radius: 999px; background: #fff; color: var(--text);
+  padding: 8px 16px; border-radius: 999px; background: var(--surface); color: var(--text);
   border: 1px solid var(--line); cursor: pointer; transition: all 0.2s;
 }
 .chip:hover { border-color: #2E9BD6; color: #2E9BD6; }
 .chipOn { background: #2E9BD6; border-color: #2E9BD6; color: #fff; }
 .chipOn:hover { color: #fff; }
 .search {
-  min-width: 240px; padding: 11px 16px; border-radius: 10px; background: #fff;
+  min-width: 240px; padding: 11px 16px; border-radius: 10px; background: var(--surface);
   border: 1px solid var(--line); color: var(--ink); outline: none; font-size: 0.9rem;
 }
 .search:focus { border-color: #F5A623; box-shadow: 0 0 0 3px rgba(245,166,35,0.18); }
 
-/* ── Blog cards ── */
+/* -- Blog cards -- */
 .featured {
-  display: grid; grid-template-columns: 1.1fr 1fr; background: #fff;
+  display: grid; grid-template-columns: 1.1fr 1fr; background: var(--surface);
   border: 1px solid var(--line); border-radius: 22px; overflow: hidden; margin-bottom: 36px;
   text-decoration: none; transition: all 0.3s;
 }
@@ -92,7 +92,7 @@
 .featuredBody { padding: 44px; display: flex; flex-direction: column; justify-content: center; }
 .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .card {
-  display: flex; flex-direction: column; background: #fff; border: 1px solid var(--line);
+  display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line);
   border-radius: 20px; overflow: hidden; text-decoration: none; transition: all 0.3s;
 }
 .card:hover { border-color: #2E9BD6; transform: translateY(-5px); box-shadow: 0 24px 60px rgba(11,18,32,0.10); }
@@ -134,7 +134,7 @@
 .card:hover .more, .featured:hover .more { gap: 11px; }
 .empty { text-align: center; padding: 80px 0; color: var(--muted); }
 
-/* ── Blog post ── */
+/* -- Blog post -- */
 .article { max-width: 760px; margin: 0 auto; }
 .article h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; color: var(--ink); margin: 40px 0 14px; letter-spacing: -0.01em; }
 .article p { color: var(--text); font-size: 1.04rem; line-height: 1.85; margin-bottom: 18px; }
@@ -149,7 +149,7 @@
 .postCta p { margin-bottom: 18px; }
 .related { margin-top: 70px; }
 
-/* ── Expertise ── */
+/* -- Expertise -- */
 .stackGroup { margin-bottom: 52px; }
 .stackGroup:last-child { margin-bottom: 0; }
 .groupTitle {
@@ -162,14 +162,14 @@
 }
 .techGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
 .tech {
-  display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: #fff;
+  display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: var(--surface);
   border: 1px solid var(--line); border-radius: 12px; text-decoration: none; color: var(--ink);
   font-weight: 600; font-size: 0.9rem; transition: all 0.2s;
 }
 .tech:hover { border-color: #2E9BD6; transform: translateY(-2px); box-shadow: 0 10px 24px rgba(46,155,214,0.14); }
 .techDot { width: 8px; height: 8px; border-radius: 50%; background: #F5A623; flex-shrink: 0; }
 .cap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.capCard { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 32px; transition: all 0.3s; position: relative; overflow: hidden; }
+.capCard { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 32px; transition: all 0.3s; position: relative; overflow: hidden; }
 .capCard::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #2E9BD6, #F5A623); opacity: 0; transition: opacity 0.3s; }
 .capCard:hover { border-color: #2E9BD6; transform: translateY(-4px); box-shadow: 0 20px 50px rgba(11,18,32,0.09); }
 .capCard:hover::before { opacity: 1; }
@@ -177,9 +177,9 @@
 .capCard h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--ink); margin-bottom: 10px; }
 .capCard p { color: var(--text); font-size: 0.92rem; line-height: 1.75; }
 
-/* ── Portfolio ── */
+/* -- Portfolio -- */
 .pGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
-.project { background: #fff; border: 1px solid var(--line); border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.3s; }
+.project { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.3s; }
 .project:hover { border-color: #2E9BD6; transform: translateY(-5px); box-shadow: 0 24px 60px rgba(11,18,32,0.10); }
 .shot { height: 230px; display: grid; place-items: center; position: relative; overflow: hidden; }
 .shotImg { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -199,7 +199,7 @@
 .pLink { margin-top: 18px; color: #2E9BD6; font-weight: 700; font-size: 0.88rem; text-decoration: none; display: inline-flex; gap: 6px; align-items: center; }
 .pLink:hover { text-decoration: underline; }
 
-/* ── CTA ── */
+/* -- CTA -- */
 .ctaWrap { padding: 20px 0 90px; }
 .cta {
   position: relative; overflow: hidden; border-radius: 24px; padding: 56px 48px;
