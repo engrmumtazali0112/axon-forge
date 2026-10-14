@@ -4,7 +4,7 @@
 .hero {
   position: relative;
   padding: 100px 0 80px;
-  background: #ffffff;
+  background: var(--surface);
   border-bottom: 1px solid rgba(245,166,35,0.1);
   overflow: hidden;
 }
@@ -98,7 +98,7 @@
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
 }
 .card {
-  background: #ffffff; border: 1px solid var(--line, #e6eaf0);
+  background: var(--surface); border: 1px solid var(--line, #e6eaf0);
   border-radius: 20px; padding: 32px;
   transition: all 0.3s; display: flex; flex-direction: column;
   position: relative; overflow: hidden;
@@ -133,7 +133,7 @@
 
 /* ── Trust Section ── */
 .trustSection {
-  padding: 70px 0; background: #ffffff;
+  padding: 70px 0; background: var(--surface);
   border-top: 1px solid var(--line, #e6eaf0);
   text-align: center;
 }
@@ -144,7 +144,7 @@
 }
 .industryTags { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 .industryTag {
-  background: #ffffff; border: 1px solid var(--line, #e6eaf0);
+  background: var(--surface); border: 1px solid var(--line, #e6eaf0);
   color: var(--text, #4a5568); padding: 8px 22px; border-radius: 20px;
   font-size: 0.85rem; transition: all 0.2s;
   font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
@@ -155,7 +155,7 @@
 .ctaSection { padding: 100px 0; background: var(--bg-soft, #f6f8fb); }
 .ctaBox {
   position: relative; text-align: center;
-  background: #ffffff; border: 1px solid rgba(245,166,35,0.2);
+  background: var(--surface); border: 1px solid rgba(245,166,35,0.2);
   border-radius: 24px; padding: 80px 40px; overflow: hidden;
 }
 .ctaGlow {

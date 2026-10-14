@@ -4,7 +4,7 @@
 .hero {
   position: relative;
   padding: 100px 0 80px;
-  background: #ffffff;
+  background: var(--surface);
   border-bottom: 1px solid rgba(245,166,35,0.1);
   overflow: hidden;
 }
@@ -54,7 +54,7 @@
 }
 .heroMeta { display: flex; gap: 12px; flex-wrap: wrap; animation: fadeUp 0.6s 0.3s ease both; }
 .metaBadge {
-  background: #ffffff; border: 1px solid rgba(245,166,35,0.15);
+  background: var(--surface); border: 1px solid rgba(245,166,35,0.15);
   color: var(--text, #4a5568); font-size: 0.83rem; padding: 8px 18px; border-radius: 20px;
   font-family: 'JetBrains Mono', monospace;
 }
@@ -93,7 +93,7 @@
 
 /* ── Service Card ─────────────────────────────────── */
 .serviceCard {
-  background: #ffffff;
+  background: var(--surface);
   border: 1px solid var(--line, #e6eaf0);
   border-radius: 20px;
   overflow: hidden;
@@ -202,12 +202,12 @@
 .goldLink:hover { text-decoration: underline; }
 
 /* ── Process ─────────────────────────────────────── */
-.processSection { padding: 100px 0; background: #ffffff; }
+.processSection { padding: 100px 0; background: var(--surface); }
 .processGrid {
   display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;
 }
 .processCard {
-  background: #ffffff; border: 1px solid var(--line, #e6eaf0);
+  background: var(--surface); border: 1px solid var(--line, #e6eaf0);
   border-radius: 18px; padding: 28px 20px; text-align: center;
   transition: all 0.3s; position: relative; overflow: hidden;
 }
@@ -231,7 +231,7 @@
 /* ── CTA ─────────────────────────────────────────── */
 .ctaSection { padding: 100px 0; background: var(--bg-soft, #f6f8fb); }
 .ctaBox {
-  text-align: center; background: #ffffff;
+  text-align: center; background: var(--surface);
   border: 1px solid rgba(245,166,35,0.2); border-radius: 24px;
   padding: 80px 40px; position: relative; overflow: hidden;
 }

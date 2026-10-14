@@ -1,4 +1,4 @@
-﻿.cs-page { padding: 100px 24px 80px; background: #fff; min-height: 100vh; }
+.cs-page { padding: 100px 24px 80px; background: var(--surface); min-height: 100vh; }
 
 .cs-back {
   display: inline-flex; align-items: center; gap: 8px;
@@ -8,7 +8,7 @@
 }
 .cs-back:hover { color: #2E9BD6; gap: 12px; }
 
-/* ── HERO ── */
+/* -- HERO -- */
 .cs-hero {
   display: grid; grid-template-columns: 1fr 1.1fr;
   gap: 60px; align-items: center; margin-bottom: 90px;
@@ -57,7 +57,7 @@
   display: inline-flex; align-items: center; gap: 8px;
   padding: 14px 24px; border-radius: 10px;
   font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem;
-  color: var(--ink, #0b1220); background: #fff;
+  color: var(--ink, #0b1220); background: var(--surface);
   border: 1.5px solid var(--line, #dbe9f5); text-decoration: none;
   transition: all 0.22s;
 }
@@ -73,7 +73,7 @@
   width: 100%; height: auto; display: block; border-radius: 12px;
 }
 
-/* ── SECTIONS ── */
+/* -- SECTIONS -- */
 .cs-section { margin-top: 90px; }
 
 .cs-eyebrow {
@@ -98,7 +98,7 @@
   box-shadow: 0 12px 32px rgba(11,18,32,0.08);
 }
 
-/* ── FLOW ── */
+/* -- FLOW -- */
 .cs-flow {
   margin: 0; padding: 0; list-style: none; counter-reset: s;
   max-width: 720px; border-left: 2px solid var(--line, #dbe9f5);
@@ -118,7 +118,7 @@
   box-shadow: 0 4px 12px rgba(46,155,214,0.3);
 }
 
-/* ── MODULES ── */
+/* -- MODULES -- */
 .cs-module {
   display: grid; grid-template-columns: 1fr 1.4fr; gap: 48px;
   align-items: center; padding: 48px 0;
@@ -147,7 +147,7 @@
 }
 .cs-module-img img { width: 100%; height: auto; display: block; }
 
-/* ── CTA ── */
+/* -- CTA -- */
 .cs-cta {
   margin-top: 100px; padding: 56px 40px;
   background: linear-gradient(120deg, #123a5c, #1f7fb8);
@@ -167,14 +167,14 @@
 .cs-cta p { color: #d7ebf8; margin: 0 0 28px; position: relative; z-index: 1; }
 .cs-cta .cs-btn { position: relative; z-index: 1; }
 
-/* ── NOT FOUND ── */
+/* -- NOT FOUND -- */
 .cs-not-found { text-align: center; padding: 100px 0; }
 .cs-not-found h1 {
   font-family: 'Syne', sans-serif; font-weight: 800;
   font-size: 2rem; color: var(--ink, #0b1220); margin: 0 0 20px;
 }
 
-/* ── RESPONSIVE ── */
+/* -- RESPONSIVE -- */
 @media (max-width: 900px) {
   .cs-page { padding: 90px 20px 60px; }
   .cs-hero { grid-template-columns: 1fr; gap: 40px; margin-bottom: 60px; }
