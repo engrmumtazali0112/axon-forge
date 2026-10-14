@@ -1,65 +1,72 @@
-﻿import { Link } from 'react-router-dom'
-import { ArrowUpRight, ExternalLink } from 'lucide-react'
+﻿// src/components/ProjectCard.jsx
+import React from 'react'
+import { Link } from 'react-router-dom'
 import './ProjectCard.css'
 
-const MAX_PILLS = 4
+const ProjectCard = ({ project }) => {
+  // Accept every field name we've seen in this project's data
+  const imgSrc      = project.cover || project.img || project.imgsrc || project.image || project.imageUrl || ''
+  const description = project.excerpt || project.description || project.text || ''
+  const techList    = project.stack || project.tech || []
+  const category    = project.industry || project.category || ''
 
-export default function ProjectCard({ project }) {
-  const stack = project.stack || []
-  const visiblePills = stack.slice(0, MAX_PILLS)
-  const extraCount = stack.length - MAX_PILLS
-  const isExternal = /^https?:\/\//.test(project.live || '')
-  const href = project.live || `/work/${project.slug}`
+  const caseStudyTo = project.slug ? `/work/${project.slug}` : null
+  const hasCaseStudy = Boolean(caseStudyTo)
+
+  const Wrapper = hasCaseStudy ? Link : 'div'
+  const wrapperProps = hasCaseStudy
+    ? {
+        to: caseStudyTo,
+        className: 'pc-card pc-card-link',
+        'aria-label': `Open case study: ${project.title}`,
+      }
+    : { className: 'pc-card pc-card-static' }
 
   return (
-    <article className="pc-card">
-      <a
-        href={href}
-        {...(isExternal ? { target: '_blank', rel: 'noreferrer' } : {})}
-        className="pc-image"
-        aria-label={project.title}
-      >
-        {project.cover ? (
-          <img
-            src={project.cover}
-            alt={project.title}
-            loading="lazy"
-            onError={(e) => { e.currentTarget.style.display = 'none' }}
-          />
-        ) : null}
-        <span className="pc-image-fallback" aria-hidden="true">
-          {project.title.charAt(0)}
-        </span>
-      </a>
+    <Wrapper {...wrapperProps}>
+      <div className="pc-image">
+        {imgSrc && <img src={imgSrc} alt={project.title} loading="lazy" />}
+      </div>
 
       <div className="pc-body">
         <div className="pc-meta">
-          <span className="pc-industry">{project.industry}</span>
-          {project.year && <><span className="pc-dot">·</span><span>{project.year}</span></>}
-          {project.duration && <><span className="pc-dot">·</span><span>{project.duration}</span></>}
+          {category && <span className="pc-category">{category}</span>}
+          {project.year && (
+            <>
+              <span className="pc-dot">·</span>
+              <span className="pc-year">{project.year}</span>
+            </>
+          )}
+          {project.duration && (
+            <>
+              <span className="pc-dot">·</span>
+              <span className="pc-duration">{project.duration}</span>
+            </>
+          )}
         </div>
 
         <h3 className="pc-title">{project.title}</h3>
-        <p className="pc-desc">{project.excerpt}</p>
+        {description && <p className="pc-desc">{description}</p>}
 
-        {stack.length > 0 && (
+        {techList.length > 0 && (
           <div className="pc-stack">
-            {visiblePills.map((t) => <span key={t} className="pc-pill">{t}</span>)}
-            {extraCount > 0 && <span className="pc-pill pc-pill-more">+{extraCount} more</span>}
+            {techList.slice(0, 4).map((t) => (
+              <span key={t} className="pc-pill">{t}</span>
+            ))}
+            {techList.length > 4 && (
+              <span className="pc-pill pc-pill-more">
+                +{techList.length - 4} more
+              </span>
+            )}
           </div>
         )}
-
-        <div className="pc-actions">
-          <Link to={`/work/${project.slug}`} className="pc-cta">
-            Read case study <ArrowUpRight size={14} />
-          </Link>
-          {isExternal && (
-            <a href={project.live} target="_blank" rel="noreferrer" className="pc-cta-ghost">
-              Live site <ExternalLink size={13} />
-            </a>
-          )}
-        </div>
       </div>
-    </article>
+
+      {hasCaseStudy && (
+        <span className="pc-arrow" aria-hidden="true">→</span>
+      )}
+    </Wrapper>
   )
 }
+
+export default ProjectCard
