@@ -1,80 +1,417 @@
-/* ═══ Dark-mode overrides ═══ */
+/* ============================================================
+   AXON FORGE — DARK MODE OVERRIDES
+   Loaded AFTER index.css so these win on specificity.
+   Every rule uses a [data-theme="dark"] prefix so light mode
+   is untouched.
+   ============================================================ */
 
-/* Navbar */
-[data-theme="dark"] nav[class*="nav"] {
-  background: var(--bg);
-  border-bottom-color: var(--line);
-}
-[data-theme="dark"] nav[class*="nav"] a { color: var(--text); }
-
-/* Generic white cards */
-[data-theme="dark"] .card,
-[data-theme="dark"] .glass,
-[data-theme="dark"] [class*="card"]:not([class*="card-"]):not([class*="Card"]) {
-  background: var(--surface);
-  border-color: var(--border);
-}
-
-/* Section backgrounds that are hardcoded to white */
+/* ─────────────────────────────────────────────────────────────
+   1. GLOBAL SURFACES
+   Any element that hardcodes a white background becomes dark.
+   ───────────────────────────────────────────────────────────── */
+[data-theme="dark"] body,
 [data-theme="dark"] main,
-[data-theme="dark"] section {
+[data-theme="dark"] section,
+[data-theme="dark"] article,
+[data-theme="dark"] header,
+[data-theme="dark"] footer {
   background-color: var(--bg);
   color: var(--text);
 }
 
-/* Form fields */
-[data-theme="dark"] input,
-[data-theme="dark"] textarea,
-[data-theme="dark"] select {
-  background: var(--bg-muted);
-  border-color: var(--border);
+[data-theme="dark"] .section-soft,
+[data-theme="dark"] .bg-soft {
+  background: var(--bg-soft);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2. ALL CARD VARIANTS
+   Covers every card class in the project, plus the generic
+   .card / .glass helpers from index.css.
+   ───────────────────────────────────────────────────────────── */
+[data-theme="dark"] .card,
+[data-theme="dark"] .glass,
+[data-theme="dark"] [class*="card"]:not([class*="card-"]):not([class*="Card"]),
+[data-theme="dark"] .expertise-card,
+[data-theme="dark"] .value-card,
+[data-theme="dark"] .step-card,
+[data-theme="dark"] .process-card,
+[data-theme="dark"] .delivery-card,
+[data-theme="dark"] .blog-card,
+[data-theme="dark"] .pricing-card,
+[data-theme="dark"] .capability-card,
+[data-theme="dark"] .about-card,
+[data-theme="dark"] .testimonial-card,
+[data-theme="dark"] .faq-card,
+[data-theme="dark"] .cta-card,
+[data-theme="dark"] .tech-card,
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .project-card,
+[data-theme="dark"] .portfolio-card,
+[data-theme="dark"] .expert-card,
+[data-theme="dark"] .team-card,
+[data-theme="dark"] .vision-card,
+[data-theme="dark"] .mission-card,
+[data-theme="dark"] .service-card {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3. TEXT INSIDE CARDS — headings + body
+   This is the fix for "white text on white card".
+   ───────────────────────────────────────────────────────────── */
+[data-theme="dark"] .card h1,
+[data-theme="dark"] .card h2,
+[data-theme="dark"] .card h3,
+[data-theme="dark"] .card h4,
+[data-theme="dark"] .card h5,
+[data-theme="dark"] .glass h1,
+[data-theme="dark"] .glass h2,
+[data-theme="dark"] .glass h3,
+[data-theme="dark"] .glass h4,
+[data-theme="dark"] .expertise-card h1,
+[data-theme="dark"] .expertise-card h2,
+[data-theme="dark"] .expertise-card h3,
+[data-theme="dark"] .expertise-card h4,
+[data-theme="dark"] .expertise-card h5,
+[data-theme="dark"] .expertise-card p,
+[data-theme="dark"] .expertise-card li,
+[data-theme="dark"] .expertise-card span,
+[data-theme="dark"] .value-card h1,
+[data-theme="dark"] .value-card h2,
+[data-theme="dark"] .value-card h3,
+[data-theme="dark"] .value-card h4,
+[data-theme="dark"] .value-card p,
+[data-theme="dark"] .value-card li,
+[data-theme="dark"] .value-card span,
+[data-theme="dark"] .step-card h1,
+[data-theme="dark"] .step-card h2,
+[data-theme="dark"] .step-card h3,
+[data-theme="dark"] .step-card h4,
+[data-theme="dark"] .step-card p,
+[data-theme="dark"] .step-card li,
+[data-theme="dark"] .step-card span,
+[data-theme="dark"] .process-card h1,
+[data-theme="dark"] .process-card h2,
+[data-theme="dark"] .process-card h3,
+[data-theme="dark"] .process-card h4,
+[data-theme="dark"] .process-card p,
+[data-theme="dark"] .process-card li,
+[data-theme="dark"] .process-card span,
+[data-theme="dark"] .blog-card h1,
+[data-theme="dark"] .blog-card h2,
+[data-theme="dark"] .blog-card h3,
+[data-theme="dark"] .blog-card h4,
+[data-theme="dark"] .blog-card p,
+[data-theme="dark"] .blog-card li,
+[data-theme="dark"] .blog-card span,
+[data-theme="dark"] .pricing-card h1,
+[data-theme="dark"] .pricing-card h2,
+[data-theme="dark"] .pricing-card h3,
+[data-theme="dark"] .pricing-card h4,
+[data-theme="dark"] .pricing-card p,
+[data-theme="dark"] .pricing-card li,
+[data-theme="dark"] .pricing-card span,
+[data-theme="dark"] .capability-card h1,
+[data-theme="dark"] .capability-card h2,
+[data-theme="dark"] .capability-card h3,
+[data-theme="dark"] .capability-card h4,
+[data-theme="dark"] .capability-card p,
+[data-theme="dark"] .capability-card li,
+[data-theme="dark"] .capability-card span,
+[data-theme="dark"] .about-card h1,
+[data-theme="dark"] .about-card h2,
+[data-theme="dark"] .about-card h3,
+[data-theme="dark"] .about-card h4,
+[data-theme="dark"] .about-card p,
+[data-theme="dark"] .about-card li,
+[data-theme="dark"] .about-card span,
+[data-theme="dark"] .testimonial-card h1,
+[data-theme="dark"] .testimonial-card h2,
+[data-theme="dark"] .testimonial-card h3,
+[data-theme="dark"] .testimonial-card h4,
+[data-theme="dark"] .testimonial-card p,
+[data-theme="dark"] .testimonial-card li,
+[data-theme="dark"] .testimonial-card span,
+[data-theme="dark"] .faq-card h1,
+[data-theme="dark"] .faq-card h2,
+[data-theme="dark"] .faq-card h3,
+[data-theme="dark"] .faq-card h4,
+[data-theme="dark"] .faq-card p,
+[data-theme="dark"] .faq-card li,
+[data-theme="dark"] .faq-card span,
+[data-theme="dark"] .cta-card h1,
+[data-theme="dark"] .cta-card h2,
+[data-theme="dark"] .cta-card h3,
+[data-theme="dark"] .cta-card h4,
+[data-theme="dark"] .cta-card p,
+[data-theme="dark"] .cta-card li,
+[data-theme="dark"] .cta-card span,
+[data-theme="dark"] .tech-card h1,
+[data-theme="dark"] .tech-card h2,
+[data-theme="dark"] .tech-card h3,
+[data-theme="dark"] .tech-card h4,
+[data-theme="dark"] .tech-card p,
+[data-theme="dark"] .tech-card span,
+[data-theme="dark"] .stat-card h1,
+[data-theme="dark"] .stat-card h2,
+[data-theme="dark"] .stat-card h3,
+[data-theme="dark"] .stat-card h4,
+[data-theme="dark"] .stat-card p,
+[data-theme="dark"] .stat-card span {
+  color: var(--text) !important;
+}
+
+/* Headings use the brighter "ink" token so they pop */
+[data-theme="dark"] .card h1,
+[data-theme="dark"] .card h2,
+[data-theme="dark"] .card h3,
+[data-theme="dark"] .card h4,
+[data-theme="dark"] .expertise-card h1,
+[data-theme="dark"] .expertise-card h2,
+[data-theme="dark"] .expertise-card h3,
+[data-theme="dark"] .expertise-card h4,
+[data-theme="dark"] .value-card h1,
+[data-theme="dark"] .value-card h2,
+[data-theme="dark"] .value-card h3,
+[data-theme="dark"] .value-card h4,
+[data-theme="dark"] .step-card h1,
+[data-theme="dark"] .step-card h2,
+[data-theme="dark"] .step-card h3,
+[data-theme="dark"] .step-card h4,
+[data-theme="dark"] .process-card h1,
+[data-theme="dark"] .process-card h2,
+[data-theme="dark"] .process-card h3,
+[data-theme="dark"] .process-card h4,
+[data-theme="dark"] .blog-card h1,
+[data-theme="dark"] .blog-card h2,
+[data-theme="dark"] .blog-card h3,
+[data-theme="dark"] .blog-card h4,
+[data-theme="dark"] .pricing-card h1,
+[data-theme="dark"] .pricing-card h2,
+[data-theme="dark"] .pricing-card h3,
+[data-theme="dark"] .pricing-card h4,
+[data-theme="dark"] .capability-card h1,
+[data-theme="dark"] .capability-card h2,
+[data-theme="dark"] .capability-card h3,
+[data-theme="dark"] .capability-card h4,
+[data-theme="dark"] .expert-card h1,
+[data-theme="dark"] .expert-card h2,
+[data-theme="dark"] .expert-card h3,
+[data-theme="dark"] .expert-card h4 {
+  color: var(--ink) !important;
+}
+
+/* Muted body text inside cards */
+[data-theme="dark"] .card p,
+[data-theme="dark"] .glass p,
+[data-theme="dark"] .expertise-card p,
+[data-theme="dark"] .value-card p,
+[data-theme="dark"] .step-card p,
+[data-theme="dark"] .process-card p,
+[data-theme="dark"] .blog-card p,
+[data-theme="dark"] .pricing-card p,
+[data-theme="dark"] .capability-card p,
+[data-theme="dark"] .about-card p,
+[data-theme="dark"] .testimonial-card p,
+[data-theme="dark"] .faq-card p,
+[data-theme="dark"] .cta-card p,
+[data-theme="dark"] .tech-card p,
+[data-theme="dark"] .stat-card p {
+  color: var(--text-body) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   4. PILLS, TAGS, CHIPS
+   ───────────────────────────────────────────────────────────── */
+[data-theme="dark"] .pill,
+[data-theme="dark"] .tag,
+[data-theme="dark"] .chip,
+[data-theme="dark"] .tech-pill,
+[data-theme="dark"] [class*="chip"]:not([class*="chipOn"]),
+[data-theme="dark"] [class*="pill"]:not([class*="pillActive"]),
+[data-theme="dark"] [class*="Pill"] {
+  background: var(--bg-muted) !important;
+  color: var(--text-body) !important;
+  border-color: var(--border) !important;
+}
+
+[data-theme="dark"] [class*="chipOn"],
+[data-theme="dark"] [class*="chipActive"],
+[data-theme="dark"] [class*="pillActive"],
+[data-theme="dark"] .active-chip {
+  background: var(--accent) !important;
+  color: #0a0e1a !important;
+  border-color: var(--accent) !important;
+  font-weight: 700;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   5. NAVBAR
+   ───────────────────────────────────────────────────────────── */
+[data-theme="dark"] nav,
+[data-theme="dark"] nav[class*="nav"],
+[data-theme="dark"] [class*="navbar"],
+[data-theme="dark"] [class*="Navbar"] {
+  background: var(--bg) !important;
+  border-bottom-color: var(--line) !important;
+}
+
+[data-theme="dark"] nav a,
+[data-theme="dark"] [class*="navbar"] a,
+[data-theme="dark"] [class*="Navbar"] a {
   color: var(--text);
 }
-[data-theme="dark"] input::placeholder,
-[data-theme="dark"] textarea::placeholder {
-  color: var(--text-soft);
+
+[data-theme="dark"] nav a:hover,
+[data-theme="dark"] [class*="navbar"] a:hover {
+  color: var(--accent);
 }
 
-/* Footer */
-[data-theme="dark"] footer {
-  background: var(--bg-soft);
-  border-top-color: var(--line);
+/* ─────────────────────────────────────────────────────────────
+   6. BUTTONS
+   ───────────────────────────────────────────────────────────── */
+[data-theme="dark"] .btn-outline,
+[data-theme="dark"] .btn-secondary {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--border);
+}
+[data-theme="dark"] .btn-outline:hover,
+[data-theme="dark"] .btn-secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Primary button (gold) — invert text to dark for contrast */
+[data-theme="dark"] .btn-primary {
+  color: #0a0e1a;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   7. FORMS
+   ───────────────────────────────────────────────────────────── */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select,
+[data-theme="dark"] .form-input {
+  background: var(--bg-muted) !important;
+  border-color: var(--border) !important;
+  color: var(--ink) !important;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder,
+[data-theme="dark"] .form-input::placeholder {
+  color: var(--text-soft) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   8. FOOTER
+   ───────────────────────────────────────────────────────────── */
+[data-theme="dark"] footer,
+[data-theme="dark"] [class*="footer"] {
+  background: var(--bg-soft) !important;
+  border-top-color: var(--line) !important;
+  color: var(--text-body) !important;
+}
+
+[data-theme="dark"] footer a,
+[data-theme="dark"] [class*="footer"] a {
   color: var(--text-body);
 }
+[data-theme="dark"] footer a:hover {
+  color: var(--accent);
+}
 
-/* Hero decorations on Home */
+/* ─────────────────────────────────────────────────────────────
+   9. LOGO / BRAND IMAGES
+   If your logo is dark-on-transparent, we invert it in dark mode.
+   If it has its own colors, remove the filter below.
+   ───────────────────────────────────────────────────────────── */
+[data-theme="dark"] .logo-img,
+[data-theme="dark"] .vision-logo,
+[data-theme="dark"] .footer-logo,
+[data-theme="dark"] [class*="logo"] img,
+[data-theme="dark"] [class*="Logo"] img {
+  filter: brightness(1.15) contrast(1.05);
+}
+
+/* If a logo disappears entirely (transparent PNG that was dark on
+   white), uncomment this to invert it in dark mode:
+[data-theme="dark"] .vision-logo,
+[data-theme="dark"] .footer-logo {
+  filter: invert(1) brightness(1.6);
+}
+*/
+
+/* ─────────────────────────────────────────────────────────────
+   10. DECORATIVE GRID / BACKGROUNDS
+   The grid pattern in body is already handled by index.css,
+   but hero decorations may need tinting.
+   ───────────────────────────────────────────────────────────── */
 [data-theme="dark"] [class*="hero"] {
   background-color: var(--bg);
 }
-[data-theme="dark"] [class*="heroBg"]::before {
+
+[data-theme="dark"] [class*="heroBg"]::before,
+[data-theme="dark"] [class*="hero"] img[class*="bg"] {
   filter: invert(1) hue-rotate(180deg);
-  opacity: 0.3;
+  opacity: 0.25;
 }
 
-/* Services cards */
-[data-theme="dark"] [class*="srvCard"],
-[data-theme="dark"] [class*="serviceCard"],
-[data-theme="dark"] [class*="ss-card"],
-[data-theme="dark"] [class*="pc-card"] {
-  background: var(--surface);
-  border-color: var(--border);
+/* ─────────────────────────────────────────────────────────────
+   11. SECTION HEADINGS OUTSIDE CARDS
+   ───────────────────────────────────────────────────────────── */
+[data-theme="dark"] .section-title {
+  color: var(--ink);
 }
-[data-theme="dark"] [class*="srvDesc"],
-[data-theme="dark"] [class*="serviceDesc"],
-[data-theme="dark"] [class*="ss-desc"],
-[data-theme="dark"] [class*="pc-desc"] {
-  color: var(--text-body);
+[data-theme="dark"] .section-subtitle {
+  color: var(--text);
+}
+[data-theme="dark"] .label {
+  color: var(--accent);
 }
 
-/* Project / Portfolio */
-[data-theme="dark"] [class*="chip"],
-[data-theme="dark"] [class*="pill"] {
-  background: var(--bg-muted);
-  border-color: var(--border);
-  color: var(--text-body);
+/* ─────────────────────────────────────────────────────────────
+   12. CTA BANNER
+   ───────────────────────────────────────────────────────────── */
+[data-theme="dark"] [class*="cta"][class*="banner"],
+[data-theme="dark"] [class*="Cta"],
+[data-theme="dark"] .cta-section {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
 }
-[data-theme="dark"] [class*="chipOn"] {
+[data-theme="dark"] [class*="cta"] h1,
+[data-theme="dark"] [class*="cta"] h2,
+[data-theme="dark"] [class*="cta"] h3,
+[data-theme="dark"] [class*="cta"] h4,
+[data-theme="dark"] [class*="cta"] p {
+  color: var(--ink) !important;
+}
+[data-theme="dark"] [class*="cta"] p {
+  color: var(--text-body) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   13. SCROLLBAR (dark variant)
+   ───────────────────────────────────────────────────────────── */
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--bg-soft);
+}
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
   background: var(--accent);
-  border-color: var(--accent);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   14. SELECTION
+   ───────────────────────────────────────────────────────────── */
+[data-theme="dark"] ::selection {
+  background: var(--gold);
   color: #0a0e1a;
 }

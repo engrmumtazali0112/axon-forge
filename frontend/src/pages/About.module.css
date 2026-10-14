@@ -2,7 +2,7 @@
    Every section sets its own background, so the page stays white
    no matter what global styles or wrappers are around it. */
 
-.page { padding-top: 76px; background: #ffffff; color: var(--text, #4a5568); }
+.page { padding-top: 76px; background: var(--surface); color: var(--text, #4a5568); }
 
 /* ── Type ── */
 .eyebrow {
@@ -33,7 +33,7 @@
 .srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* ── Layout ── */
-.section { padding: 88px 0; background: #ffffff; }
+.section { padding: 88px 0; background: var(--surface); }
 .soft { background: var(--bg-soft, #f6f8fb); border-top: 1px solid var(--line, #e6eaf0); border-bottom: 1px solid var(--line, #e6eaf0); }
 .sectionHead { margin-bottom: 48px; }
 .center { text-align: center; }
@@ -41,7 +41,7 @@
 .split .sectionHead { margin-bottom: 0; position: sticky; top: 110px; }
 
 /* ── Hero ── */
-.hero { padding: 40px 0 80px; background: #ffffff; }
+.hero { padding: 40px 0 80px; background: var(--surface); }
 .crumbs {
   display: flex; gap: 10px; align-items: center; margin-bottom: 44px;
   font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--muted, #7b8494);
@@ -54,7 +54,7 @@
 
 .glance {
   display: grid; grid-template-columns: repeat(4, 1fr); margin: 36px 0 0;
-  border: 1px solid var(--line, #e6eaf0); border-radius: 14px; background: #fff; overflow: hidden;
+  border: 1px solid var(--line, #e6eaf0); border-radius: 14px; background: var(--surface); overflow: hidden;
 }
 .glanceItem { padding: 18px 16px; border-right: 1px solid var(--line, #e6eaf0); display: flex; flex-direction: column; gap: 2px; }
 .glanceItem:last-child { border-right: 0; }
@@ -87,7 +87,7 @@
 /* ── Values ── */
 .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .valueCard {
-  background: #fff; border: 1px solid var(--line, #e6eaf0); border-radius: 14px; padding: 28px;
+  background: var(--surface); border: 1px solid var(--line, #e6eaf0); border-radius: 14px; padding: 28px;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .valueCard:hover { border-color: var(--blue, #2e9bd6); box-shadow: 0 10px 30px rgba(46,155,214,0.1); }
@@ -126,12 +126,12 @@
   font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 600;
 }
 .regions svg { color: var(--blue, #2e9bd6); }
-.office { display: flex; gap: 16px; align-items: center; margin-top: 28px; padding: 20px; border: 1px solid var(--line, #e6eaf0); border-radius: 14px; background: #fff; }
+.office { display: flex; gap: 16px; align-items: center; margin-top: 28px; padding: 20px; border: 1px solid var(--line, #e6eaf0); border-radius: 14px; background: var(--surface); }
 
 /* ── Experts ── */
 .team { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 22px; justify-content: center; }
 .member {
-  position: relative; background: #fff; border: 1px solid var(--line, #dbe9f5); border-radius: 18px;
+  position: relative; background: var(--surface); border: 1px solid var(--line, #dbe9f5); border-radius: 18px;
   padding: 32px 28px 28px; text-align: center; transition: all 0.25s; overflow: hidden;
 }
 .member::before {
@@ -166,7 +166,7 @@
 }
 .subForm { display: flex; flex-wrap: wrap; gap: 10px; }
 .subInput {
-  flex: 1 1 220px; padding: 14px 16px; background: #fff; color: var(--ink, #0b1220);
+  flex: 1 1 220px; padding: 14px 16px; background: var(--surface); color: var(--ink, #0b1220);
   border: 1px solid var(--line, #e6eaf0); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
 }
 .subInput:focus { outline: none; border-color: var(--blue, #2e9bd6); box-shadow: 0 0 0 3px rgba(46,155,214,0.18); }
@@ -183,7 +183,7 @@
 .subOk svg { color: #1f9d55; }
 
 /* ── CTA ── */
-.ctaWrap { padding: 0 0 96px; background: #fff; }
+.ctaWrap { padding: 0 0 96px; background: var(--surface); }
 .cta {
   display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap;
   padding: 44px 48px; background: var(--gold-soft, #fff4de); border: 1px solid rgba(245,166,35,0.35); border-radius: 18px;
