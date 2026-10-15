@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import { NavLink, Link } from 'react-router-dom'
+import { NavLink, Link, useLocation } from 'react-router-dom'
 import { Menu, X, ArrowRight } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
+import PortfolioMegaMenu from './PortfolioMegaMenu'
 import styles from './Navbar.module.css'
 
 const NAV_LINKS = [
@@ -32,6 +33,8 @@ function LogoMark() {
 export default function Navbar({ theme, onToggleTheme }) {
   const [open, setOpen]         = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const { pathname } = useLocation()
+  const portfolioActive = pathname.startsWith('/portfolio') || pathname.startsWith('/work')
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
@@ -54,6 +57,11 @@ export default function Navbar({ theme, onToggleTheme }) {
         <ul className={styles.links}>
           {NAV_LINKS.map(({ to, label }) => (
             <li key={to}>
+              {to === '/portfolio' ? (
+                <PortfolioMegaMenu
+                  className={`${styles.link} ${portfolioActive ? styles.active : ''}`}
+                />
+              ) : (
               <NavLink
                 to={to}
                 end={to === '/'}
@@ -61,6 +69,7 @@ export default function Navbar({ theme, onToggleTheme }) {
               >
                 {label}
               </NavLink>
+              )}
             </li>
           ))}
         </ul>
@@ -83,7 +92,14 @@ export default function Navbar({ theme, onToggleTheme }) {
 
       <div className={`${styles.mobile} ${open ? styles.mobileOpen : ''}`}>
         <div className={styles.mobileLinks}>
-          {NAV_LINKS.map(({ to, label }) => (
+          {NAV_LINKS.map(({ to, label }) => to === '/portfolio' ? (
+            <PortfolioMegaMenu
+              key={to}
+              mobile
+              className={`${styles.mobileLink} ${portfolioActive ? styles.mobileLinkActive : ''}`}
+              onNavigate={() => setOpen(false)}
+            />
+          ) : (
             <NavLink
               key={to}
               to={to}

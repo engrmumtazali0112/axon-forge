@@ -1,13 +1,42 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, Star } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Play, Star } from 'lucide-react'
 import { getTestimonials } from '../api'
+import WorkSections from '../components/WorkSections'
+import LatestPosts from '../components/LatestPosts'
 
 /* Self-contained page: styles live in the CSS string at the bottom, so this is the only file to replace.
    You can delete the old Testimonials.module.css. */
 
 const AUTOPLAY_MS = 6500
 const INDUSTRIES = ['FinTech', 'EdTech', 'HealthTech', 'E-Commerce', 'SaaS', 'Logistics', 'AI/ML', 'Media']
+
+/* Shown when the API returns no testimonials. Replace with your real reviews.
+   For video cards, paste a YouTube link or an .mp4 URL into `video` (empty = placeholder only). */
+const SEED = [
+  { id: 's1', type: 'video', video: '', platform: 'Fiverr', name: 'Angelique Jones', role: 'CEO', company: 'Tech Innovations', rating: 5 },
+  { id: 's2', type: 'video', video: '', platform: 'Fiverr', name: 'Don', role: 'CTO', company: 'DataFlow Systems', rating: 5 },
+  { id: 's3', platform: 'Direct client', name: 'James Davis', role: 'CTO', company: 'TechFlow Inc.', rating: 5,
+    text: 'Axon Forge automated our entire workflow. What used to take 3 days now runs in minutes. ROI was visible in week one.' },
+  { id: 's4', platform: 'Fiverr', name: 'Angel Majerro', role: 'Client from Spain', rating: 5,
+    text: 'The work by Abdul and Zubair Khan from DevEntia Tech demonstrated a high level of professionalism — completely error-free and beyond expectations. Communication was proactive and clear throughout. Outstanding job!' },
+]
+
+/* Platform badge: brand colour + mark for known sources, initials otherwise */
+const platformOf = (t) => {
+  const name = t.platform || t.source || t.company || 'Client review'
+  const l = name.toLowerCase()
+  if (l.includes('fiverr'))   return { name, mark: 'fiverr', bg: '#1dbf73', small: true }
+  if (l.includes('upwork'))   return { name, mark: 'Up',     bg: '#14a800' }
+  if (l.includes('linkedin')) return { name, mark: 'in',     bg: '#0a66c2' }
+  return { name, mark: initials(name), bg: 'linear-gradient(135deg,#2E9BD6,#1f7fb8)' }
+}
+
+/* YouTube link -> embed URL; anything else is treated as a video file */
+const toEmbed = (u = '') => {
+  const m = u.match(/(?:youtu\.be\/|v=|embed\/)([\w-]{11})/)
+  return m ? { yt: `https://www.youtube.com/embed/${m[1]}?autoplay=1&rel=0` } : { file: u }
+}
 
 const initials = (name = '') => name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()
 
@@ -17,10 +46,16 @@ export default function Testimonials() {
   const [active, setActive]   = useState(0)
   const paused = useRef(false)
   const touchX = useRef(null)
+  const [playing, setPlaying] = useState(null)
+  const playingRef = useRef(null)
 
   useEffect(() => {
     getTestimonials()
-      .then((r) => setItems(r.data.testimonials || []))
+      .then((r) => {
+        const list = r.data.testimonials || []
+        setItems(list.length ? list : SEED)
+      })
+      .catch(() => setItems(SEED))
       .finally(() => setLoading(false))
   }, [])
 
@@ -32,9 +67,13 @@ export default function Testimonials() {
   /* Autoplay (paused on hover/focus) */
   useEffect(() => {
     if (n < 2) return
-    const id = setInterval(() => { if (!paused.current) setActive((a) => (a + 1) % n) }, AUTOPLAY_MS)
+    const id = setInterval(() => { if (!paused.current && playingRef.current == null) setActive((a) => (a + 1) % n) }, AUTOPLAY_MS)
     return () => clearInterval(id)
   }, [n])
+
+  /* Stop any playing video when the slide changes */
+  useEffect(() => { setPlaying(null); playingRef.current = null }, [active])
+  const startVideo = (key) => { setPlaying(key); playingRef.current = key }
 
   const onKey = (e) => {
     if (e.key === 'ArrowRight') next()
@@ -94,28 +133,66 @@ export default function Testimonials() {
                 {items.map((t, i) => {
                   const d = offsetOf(i)
                   const vis = Math.abs(d) <= 1
+                  const key = t.id ?? i
+                  const src = t.video || t.videoUrl || ''
+                  const isVideo = t.type === 'video' || Boolean(src)
+                  const plat = platformOf(t)
+                  const embed = src ? toEmbed(src) : null
+                  const isPlaying = playing === key && d === 0 && embed
+                  const stars = (size) => Array.from({ length: t.rating || 5 }).map((_, k) => <Star key={k} size={size} fill="#F5A623" color="#F5A623" />)
+                  const logo = <span className={`tm-logo ${plat.small ? 'is-small' : ''}`} style={{ background: plat.bg }}>{plat.mark}</span>
                   return (
                     <article
-                      key={t.id ?? i}
-                      className={`tm-card ${d === 0 ? 'is-active' : ''}`}
+                      key={key}
+                      className={`tm-card ${d === 0 ? 'is-active' : ''} ${isVideo ? 'is-video' : ''}`}
                       style={{ '--d': d, opacity: vis ? 1 : 0, pointerEvents: vis ? 'auto' : 'none', zIndex: 10 - Math.abs(d) }}
                       aria-hidden={d !== 0}
                       aria-label={`Testimonial ${i + 1} of ${n}`}
                       onClick={() => d !== 0 && go(i)}
                     >
-                      <header className="tm-src">
-                        <span className="tm-logo">{initials(t.platform || t.source || t.company || 'AF')}</span>
-                        <span className="tm-srcname">{t.platform || t.source || t.company || 'Client review'}</span>
-                      </header>
-                      <div className="tm-cardstars" aria-label={`${t.rating || 5} out of 5`}>
-                        {Array.from({ length: t.rating || 5 }).map((_, k) => <Star key={k} size={18} fill="#F5A623" color="#F5A623" />)}
-                      </div>
-                      <p className="tm-text">{t.text}</p>
+                      {isVideo ? (
+                        <>
+                          <div className="tm-video">
+                            {isPlaying ? (
+                              embed.yt
+                                ? <iframe src={embed.yt} title={`Video review by ${t.name}`} allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen />
+                                : <video src={embed.file} controls autoPlay playsInline />
+                            ) : (
+                              <button
+                                type="button"
+                                className="tm-play"
+                                disabled={d === 0 && !src}
+                                tabIndex={d === 0 && src ? 0 : -1}
+                                aria-label={src ? `Play video review by ${t.name}` : 'Video review'}
+                                onClick={() => d === 0 && src && startVideo(key)}
+                              >
+                                <span className="tm-rings" aria-hidden="true"><i /><i /></span>
+                                <span className="tm-playbtn"><Play size={26} fill="currentColor" /></span>
+                                <span className="tm-vlabel"><b>Client Testimonial</b><small>Video Review</small></span>
+                              </button>
+                            )}
+                          </div>
+                          <header className="tm-src tm-src-row">
+                            {logo}
+                            <span className="tm-srcname">{plat.name}</span>
+                            <span className="tm-cardstars tm-stars-end" aria-label={`${t.rating || 5} out of 5`}>{stars(17)}</span>
+                          </header>
+                        </>
+                      ) : (
+                        <>
+                          <header className="tm-src">
+                            {logo}
+                            <span className="tm-srcname">{plat.name}</span>
+                          </header>
+                          <div className="tm-cardstars" aria-label={`${t.rating || 5} out of 5`}>{stars(18)}</div>
+                          <p className="tm-text">{t.text}</p>
+                        </>
+                      )}
                       <footer className="tm-author">
                         <span className="tm-avatar">{(t.avatar && t.avatar.length <= 3 ? t.avatar : initials(t.name)) || '?'}</span>
                         <span>
                           <span className="tm-name">{t.name}</span>
-                          <span className="tm-role">{[t.role, t.company].filter(Boolean).join(' · ')}</span>
+                          <span className="tm-role">{[t.role, t.company].filter(Boolean).join(', ')}</span>
                         </span>
                       </footer>
                     </article>
@@ -164,6 +241,12 @@ export default function Testimonials() {
           </div>
         </div>
       </section>
+
+      {/* Process · commitments · stack · engagement models */}
+      <WorkSections />
+
+      {/* Latest blog posts (footer follows from App.jsx) */}
+      <LatestPosts />
     </main>
   )
 }
@@ -182,7 +265,7 @@ const CSS = `
 .tm-stage-wrap{padding:56px 0 72px;background:linear-gradient(180deg,#fff 0%,#f2f8fd 100%);overflow:hidden}
 .tm-carousel{outline:none;position:relative}
 .tm-carousel:focus-visible{outline:2px solid #2E9BD6;outline-offset:8px;border-radius:12px}
-.tm-stage{position:relative;height:420px;perspective:1400px;max-width:1100px;margin:0 auto}
+.tm-stage{position:relative;height:540px;perspective:1400px;max-width:1100px;margin:0 auto}
 .tm-card{
   --w:min(460px,86vw);
   position:absolute;top:0;left:50%;width:var(--w);height:100%;
@@ -207,6 +290,28 @@ const CSS = `
 .tm-name{display:block;font-weight:700;color:#0b1220;font-size:1.02rem}
 .tm-role{display:block;color:#7b8494;font-size:.88rem;margin-top:2px}
 
+.tm-logo{overflow:hidden;flex-shrink:0;color:#fff}
+.tm-logo.is-small{font-size:.8rem;letter-spacing:-.02em;text-transform:lowercase}
+.tm-src-row{margin:18px 0 0;padding-bottom:0}
+.tm-src-row .tm-srcname{flex:1}
+.tm-stars-end{margin:0}
+.tm-card.is-video{padding:30px 30px 26px}
+.tm-card.is-video .tm-author{margin-top:auto}
+.tm-video{position:relative;aspect-ratio:16/11;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,#123a5c 0%,#1f7fb8 100%)}
+.tm-video iframe,.tm-video video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+.tm-play{position:absolute;inset:0;width:100%;border:0;background:transparent;color:#fff;cursor:pointer;display:grid;place-items:center;padding:0}
+.tm-play:disabled{cursor:default}
+.tm-rings{position:absolute;left:50%;top:44%;width:0;height:0}
+.tm-rings i{position:absolute;border-radius:50%;border:1.5px solid rgba(255,255,255,.35);transform:translate(-50%,-50%);animation:tm-ring 2.6s ease-out infinite}
+.tm-rings i:nth-child(1){width:104px;height:104px}
+.tm-rings i:nth-child(2){width:140px;height:140px;animation-delay:.9s}
+@keyframes tm-ring{0%{opacity:.9;transform:translate(-50%,-50%) scale(.85)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.15)}}
+.tm-playbtn{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:#F5A623;color:#0b1220;box-shadow:0 10px 28px rgba(0,0,0,.3);transition:transform .2s}
+.tm-play:not(:disabled):hover .tm-playbtn{transform:translate(-50%,-50%) scale(1.08)}
+.tm-play:focus-visible{outline:3px solid #F5A623;outline-offset:-6px}
+.tm-vlabel{position:absolute;left:0;right:0;bottom:20px;display:flex;flex-direction:column;gap:2px;text-align:center}
+.tm-vlabel b{font-size:.92rem;font-weight:600}.tm-vlabel small{font-size:.76rem;opacity:.75}
+.tm-card:not(.is-active) .tm-playbtn{transform:translate(-50%,-50%) scale(.8)}
 .tm-controls{display:flex;align-items:center;justify-content:center;gap:22px;margin-top:40px}
 .tm-arrow{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;border:1.5px solid #dbe9f5;background:#fff;color:#0b1220;cursor:pointer;transition:all .2s}
 .tm-arrow:hover{border-color:#2E9BD6;color:#2E9BD6;transform:translateY(-2px)}
@@ -237,9 +342,30 @@ const CSS = `
 .tm-btn:hover{background:#ffb93d;transform:translateY(-2px);box-shadow:0 12px 28px rgba(245,166,35,.4)}
 
 @media(max-width:900px){
-  .tm-stage{height:440px}
+  .tm-stage{height:560px}
   .tm-card:not(.is-active){opacity:0!important;pointer-events:none!important}
 }
-@media(max-width:600px){.tm-cta{padding:34px 24px}.tm-stage{height:460px}}
-@media(prefers-reduced-motion:reduce){.tm-card{transition:none}.tm-spinner{animation:none}}
+@media(max-width:600px){.tm-cta{padding:34px 24px}.tm-stage{height:560px}}
+@media(prefers-reduced-motion:reduce){.tm-rings i{animation:none}.tm-card{transition:none}.tm-spinner{animation:none}}
+/* ── Night view ── */
+[data-theme="dark"] .tm-page,[data-theme="dark"] .tm-head,[data-theme="dark"] .tm-industries,[data-theme="dark"] .tm-ctawrap{background:var(--surface,#121a2e)}
+[data-theme="dark"] .tm-industries{border-top-color:var(--border,#2a3350)}
+[data-theme="dark"] .tm-stage-wrap{background:var(--bg-soft,#0e1424)}
+[data-theme="dark"] .tm-crumbs,[data-theme="dark"] .tm-crumbs a,[data-theme="dark"] .tm-role,[data-theme="dark"] .tm-ilabel,[data-theme="dark"] .tm-empty{color:var(--muted,#8a96ad)}
+[data-theme="dark"] .tm-eyebrow,[data-theme="dark"] .tm-rating strong,[data-theme="dark"] .tm-empty a{color:var(--accent,#5ab8ee)}
+[data-theme="dark"] .tm-h1,[data-theme="dark"] .tm-name,[data-theme="dark"] .tm-srcname{color:var(--text-head,#f1f5f9)}
+[data-theme="dark"] .tm-sub,[data-theme="dark"] .tm-rating,[data-theme="dark"] .tm-text{color:var(--text-body,#b6c2d4)}
+[data-theme="dark"] .tm-card{background:var(--surface,#121a2e);border-color:var(--border,#2a3350);box-shadow:0 14px 40px rgba(0,0,0,.35)}
+[data-theme="dark"] .tm-card.is-active{border-color:var(--accent,#5ab8ee);box-shadow:0 30px 70px rgba(0,0,0,.55)}
+[data-theme="dark"] .tm-card:not(.is-active):hover{border-color:var(--accent,#5ab8ee)}
+[data-theme="dark"] .tm-author{border-top-color:var(--border,#2a3350)}
+[data-theme="dark"] .tm-arrow{background:var(--surface,#121a2e);border-color:var(--border,#2a3350);color:var(--text-head,#f1f5f9)}
+[data-theme="dark"] .tm-arrow:hover{border-color:var(--accent,#5ab8ee);color:var(--accent,#5ab8ee)}
+[data-theme="dark"] .tm-arrow-main,[data-theme="dark"] .tm-arrow-main:hover{background:#2E9BD6;border-color:#2E9BD6;color:#fff}
+[data-theme="dark"] .tm-dot{background:var(--border,#2a3350)}
+[data-theme="dark"] .tm-dot.on{background:#F5A623}
+[data-theme="dark"] .tm-tag{background:var(--surface,#121a2e);border-color:var(--border,#2a3350);color:var(--text-body,#b6c2d4)}
+[data-theme="dark"] .tm-tag:hover{background:var(--bg-muted,#1a2340);border-color:var(--accent,#5ab8ee);color:var(--accent,#5ab8ee)}
+[data-theme="dark"] .tm-spinner{border-color:var(--border,#2a3350);border-top-color:#F5A623}
+[data-theme="dark"] .tm-video{background:linear-gradient(135deg,#0b2238 0%,#175f8c 100%)}
 `
