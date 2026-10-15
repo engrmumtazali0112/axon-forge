@@ -70,7 +70,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className={styles.col}>
+          <div className={`${styles.col} ${styles.contact}`}>
             <h4 className={styles.colTitle}>Get in touch</h4>
             <ul className={styles.contactList}>
               <li><span className={styles.icon}><MapPin size={14} /></span>Lahore, Pakistan · Remote</li>

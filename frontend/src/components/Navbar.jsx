@@ -74,7 +74,9 @@ export default function Navbar({ theme, onToggleTheme }) {
           ))}
         </ul>
 
-        <ThemeToggle theme={theme} onToggle={onToggleTheme} />
+        <div className={styles.themeSlot}>
+          <ThemeToggle theme={theme} onToggle={onToggleTheme} />
+        </div>
 
         <Link to="/contact" className={styles.cta}>
           Get a quote <ArrowRight size={14} />

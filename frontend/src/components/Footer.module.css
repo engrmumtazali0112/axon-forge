@@ -90,11 +90,34 @@
 }
 
 @media (max-width: 900px) {
-  .grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+  .footer { padding: 52px 0 0; }
+  .grid { grid-template-columns: 1fr 1fr; gap: 32px 28px; padding-bottom: 36px; }
   .brand { grid-column: span 2; }
+  .contact { grid-column: span 2; }
 }
+
+/* Phones: compact two-column footer */
 @media (max-width: 560px) {
-  .grid { grid-template-columns: 1fr; }
-  .brand { grid-column: span 1; }
-  .bottom { flex-direction: column; gap: 8px; text-align: center; }
+  .footer { padding: 36px 0 0; }
+  .grid { grid-template-columns: 1fr 1fr; gap: 24px 16px; padding-bottom: 24px; }
+  .brand { grid-column: span 2; gap: 12px; }
+  .contact { grid-column: span 2; }
+
+  .logo svg { width: 34px; height: auto; }
+  .logoText { font-size: 0.95rem; }
+  .tagline { font-size: 0.84rem; line-height: 1.6; max-width: none; }
+  .socials { gap: 8px; }
+  .socialBtn { width: 34px; height: 34px; }
+
+  .colTitle { font-size: 0.88rem; margin: 0 0 10px; }
+  .col ul { gap: 7px; }
+  .col ul li a { font-size: 0.84rem; }
+
+  .contactList { margin-bottom: 14px !important; gap: 8px !important; }
+  .contactList li { font-size: 0.84rem; gap: 8px; }
+  .icon { width: 24px; height: 24px; border-radius: 6px; }
+  .cta { padding: 9px 18px; font-size: 0.82rem; }
+
+  /* keep copyright clear of the floating WhatsApp button */
+  .bottom { flex-direction: row; justify-content: flex-start; padding: 14px 72px 14px 0; font-size: 0.78rem; text-align: left; }
 }
