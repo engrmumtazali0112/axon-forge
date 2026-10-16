@@ -40,7 +40,11 @@ const toEmbed = (u = '') => {
 
 const initials = (name = '') => name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()
 
-export default function Testimonials() {
+/* `embedded` = rendered at the bottom of another page (e.g. Services):
+   no breadcrumb, heading is an h2, and the page-level extras (process block + blog posts) are skipped. */
+export default function Testimonials({ embedded = false }) {
+  const Wrap = embedded ? 'div' : 'main'
+  const Heading = embedded ? 'h2' : 'h1'
   const [items, setItems]     = useState([])
   const [loading, setLoading] = useState(true)
   const [active, setActive]   = useState(0)
@@ -95,17 +99,19 @@ export default function Testimonials() {
   }
 
   return (
-    <main className="tm-page">
+    <Wrap className="tm-page">
       <style>{CSS}</style>
 
       {/* Header */}
       <section className="tm-head">
         <div className="container">
-          <nav className="tm-crumbs" aria-label="Breadcrumb">
-            <Link to="/">Home</Link><span>/</span><span aria-current="page">Testimonials</span>
-          </nav>
+          {!embedded && (
+            <nav className="tm-crumbs" aria-label="Breadcrumb">
+              <Link to="/">Home</Link><span>/</span><span aria-current="page">Testimonials</span>
+            </nav>
+          )}
           <p className="tm-eyebrow">Testimonials</p>
-          <h1 className="tm-h1">What Our Clients Say</h1>
+          <Heading className="tm-h1">What Our Clients Say</Heading>
           <p className="tm-sub">Discover what our clients think about our services and how we&apos;ve helped them achieve their goals.</p>
           <div className="tm-rating">
             <span className="tm-stars">{Array.from({ length: 5 }).map((_, i) => <Star key={i} size={20} fill="#F5A623" color="#F5A623" />)}</span>
@@ -243,11 +249,11 @@ export default function Testimonials() {
       </section>
 
       {/* Process · commitments · stack · engagement models */}
-      <WorkSections />
+      {!embedded && <WorkSections />}
 
       {/* Latest blog posts (footer follows from App.jsx) */}
-      <LatestPosts />
-    </main>
+      {!embedded && <LatestPosts />}
+    </Wrap>
   )
 }
 

@@ -1,11 +1,11 @@
 """
-Next Tech Solutions — FastAPI Backend  (FINAL)
+Axon Forge — FastAPI Backend (PostgreSQL / Neon)
 ================================================
-• POST/PUT/DELETE /api/services  — full CRUD with image upload → MySQL
-• GET  /api/services             — reads from DB (falls back gracefully)
+• POST/PUT/DELETE /api/services  — full CRUD with image upload
+• GET  /api/services             — reads from DB
 • Images saved to media/uploads/services/ and served at /media/...
-• Contact form sends real Gmail email
-• Team / Testimonials / Stats remain as static data
+• Contact form sends a real Gmail email
+• Team / Testimonials / Stats remain static data
 """
 
 import os, json, uuid, smtplib, uvicorn
@@ -25,12 +25,22 @@ from slugify                  import slugify
 from PIL                      import Image as PILImage
 
 from sqlalchemy import create_engine, Column, Integer, String, Text, Boolean, DateTime
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm             import sessionmaker, Session
+from sqlalchemy.orm import declarative_base, sessionmaker, Session
 
 # ─── Config ───────────────────────────────────────────────────────────────────
 
-DATABASE_URL  = os.getenv("DATABASE_URL",  "mysql+pymysql://root:@localhost:3306/itservices_db")
+def normalize_db_url(url: str) -> str:
+    """Make sure SQLAlchemy uses the psycopg (v3) driver that is installed."""
+    if url.startswith("postgres://"):
+        url = "postgresql://" + url[len("postgres://"):]
+    if url.startswith("postgresql://"):
+        url = "postgresql+psycopg://" + url[len("postgresql://"):]
+    return url
+
+DATABASE_URL  = normalize_db_url(os.getenv("DATABASE_URL", ""))
+if not DATABASE_URL:
+    raise RuntimeError("DATABASE_URL is not set. Add it to backend/.env")
+
 SMTP_HOST     = os.getenv("SMTP_HOST",     "smtp.gmail.com")
 SMTP_PORT     = int(os.getenv("SMTP_PORT", "587"))
 SMTP_USERNAME = os.getenv("SMTP_USERNAME", "")
@@ -38,20 +48,23 @@ SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
 EMAIL_FROM    = os.getenv("EMAIL_FROM",    SMTP_USERNAME)
 EMAIL_TO      = os.getenv("EMAIL_TO",      SMTP_USERNAME)
 
+# Extra allowed origins, comma separated (e.g. your Vercel URL)
+EXTRA_ORIGINS = [o.strip() for o in os.getenv("CORS_ORIGINS", "").split(",") if o.strip()]
+
 UPLOAD_DIR    = Path("media/uploads/services")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 ALLOWED_IMG   = {"image/jpeg", "image/png", "image/webp"}
 MAX_MB        = 5
 
 # ─── Database setup ───────────────────────────────────────────────────────────
+# NOTE: no "charset" option here — that is MySQL-only and breaks PostgreSQL.
 
 engine = create_engine(
     DATABASE_URL,
-    pool_pre_ping  = True,
-    pool_size      = 10,
-    max_overflow   = 20,
-    pool_recycle   = 3600,
-    connect_args   = {"charset": "utf8mb4"},
+    pool_pre_ping = True,
+    pool_size     = 5,
+    max_overflow  = 10,
+    pool_recycle  = 300,
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base         = declarative_base()
@@ -77,7 +90,7 @@ class ServiceModel(Base):
     short_description = Column(String(500), nullable=True)
     icon              = Column(String(20),  nullable=True)
     photo_url         = Column(String(500), nullable=True)
-    features          = Column(Text,        nullable=True)   # stored as JSON string
+    features          = Column(Text,        nullable=True)   # JSON string
     price_range       = Column(String(50),  nullable=True)
     color_theme       = Column(String(30),  nullable=True,   default="gold")
     order_index       = Column(Integer,     default=0)
@@ -90,8 +103,8 @@ class ServiceModel(Base):
 # ─── FastAPI app ──────────────────────────────────────────────────────────────
 
 app = FastAPI(
-    title       = "Axon Forge  API",
-    version     = "2.0.0",
+    title       = "Axon Forge API",
+    version     = "2.1.0",
     description = "Services CRUD + image upload + contact form",
 )
 
@@ -100,10 +113,12 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173", "http://localhost:3000",
         "http://127.0.0.1:5173", "http://127.0.0.1:3000",
+        *EXTRA_ORIGINS,
     ],
-    allow_credentials = True,
-    allow_methods     = ["*"],
-    allow_headers     = ["*"],
+    allow_origin_regex = r"https://.*\.vercel\.app",
+    allow_credentials  = True,
+    allow_methods      = ["*"],
+    allow_headers      = ["*"],
 )
 
 # Serve uploaded images at /media/...
@@ -112,8 +127,11 @@ app.mount("/media", StaticFiles(directory="media"), name="media")
 
 @app.on_event("startup")
 def on_startup():
-    # Base.metadata.create_all(bind=engine)   # Disabled — not needed since Strapi handles content
-    print("✅  API ready (Strapi handles content, FastAPI handles contact form).")
+    try:
+        Base.metadata.create_all(bind=engine)   # creates the table if it doesn't exist
+        print("✅  Database connected, tables ready.")
+    except Exception as e:
+        print(f"❌  Database error on startup: {e}")
 
 
 # ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -193,7 +211,7 @@ def to_dict(s: ServiceModel) -> dict:
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# SERVICES  CRUD
+# SERVICES CRUD
 # ═══════════════════════════════════════════════════════════════════════════════
 
 @app.get("/api/services", tags=["Services"])
@@ -201,7 +219,7 @@ def list_services(active_only: bool = True, db: Session = Depends(get_db)):
     """List services from database. ?active_only=false returns all."""
     q = db.query(ServiceModel)
     if active_only:
-        q = q.filter(ServiceModel.is_active == True)
+        q = q.filter(ServiceModel.is_active.is_(True))
     rows = q.order_by(ServiceModel.order_index, ServiceModel.id).all()
     return {"services": [to_dict(r) for r in rows]}
 
@@ -229,10 +247,7 @@ async def create_service(
     image: Optional[UploadFile]      = File(None),
     db:   Session = Depends(get_db),
 ):
-    """
-    Create a service. Send as **multipart/form-data**.
-    `features` = comma-separated string  e.g.  `React, FastAPI, PostgreSQL`
-    """
+    """Create a service (multipart/form-data). `features` = comma-separated string."""
     photo_url = save_image(image) if (image and image.filename) else None
     s = ServiceModel(
         title             = title.strip(),
@@ -269,12 +284,14 @@ async def update_service(
     image: Optional[UploadFile]       = File(None),
     db:   Session = Depends(get_db),
 ):
-    """Update a service. Only send fields you want to change."""
+    """Update a service. Only send the fields you want to change."""
     s = db.query(ServiceModel).filter(ServiceModel.id == service_id).first()
     if not s:
         raise HTTPException(404, "Service not found")
 
-    if title             is not None: s.title             = title.strip(); s.slug = unique_slug(db, title, service_id)
+    if title is not None:
+        s.title = title.strip()
+        s.slug  = unique_slug(db, title, service_id)
     if description       is not None: s.description       = description.strip()
     if short_description is not None: s.short_description = short_description
     if icon              is not None: s.icon              = icon
@@ -300,13 +317,14 @@ def delete_service(service_id: int, db: Session = Depends(get_db)):
     s = db.query(ServiceModel).filter(ServiceModel.id == service_id).first()
     if not s:
         raise HTTPException(404, "Service not found")
+    title = s.title
     remove_image(s.photo_url)
     db.delete(s); db.commit()
-    return {"message": f"Service '{s.title}' deleted"}
+    return {"message": f"Service '{title}' deleted"}
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STATIC DATA  (Team / Testimonials / Stats)
+# STATIC DATA (Team / Testimonials / Stats)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 TEAM = [
@@ -346,19 +364,19 @@ TESTIMONIALS = [
 STATS = {"projects_completed":85,"happy_clients":60,"years_experience":5,"technologies":30}
 
 
-@app.get("/api/team",         tags=["Static Data"]) 
+@app.get("/api/team",         tags=["Static Data"])
 def get_team():         return {"team": TEAM}
 
-@app.get("/api/testimonials", tags=["Static Data"]) 
+@app.get("/api/testimonials", tags=["Static Data"])
 def get_testimonials(): return {"testimonials": TESTIMONIALS}
 
-@app.get("/api/stats",        tags=["Static Data"]) 
+@app.get("/api/stats",        tags=["Static Data"])
 def get_stats():        return STATS
 
-@app.get("/",  tags=["Health"]) 
-def root():    return {"message": "Next Tech Solutions API v2", "status": "running", "docs": "/docs"}
+@app.get("/",  tags=["Health"])
+def root():    return {"message": "Axon Forge API v2", "status": "running", "docs": "/docs"}
 
-@app.get("/health", tags=["Health"]) 
+@app.get("/health", tags=["Health"])
 def health():  return {"status": "healthy"}
 
 
@@ -385,7 +403,7 @@ def send_email(subject: str, html: str, plain: str) -> bool:
         from email.mime.text      import MIMEText
         msg             = MIMEMultipart("alternative")
         msg["Subject"]  = subject
-        msg["From"]     = f"Next Tech Solutions <{EMAIL_FROM}>"
+        msg["From"]     = f"Axon Forge <{EMAIL_FROM}>"
         msg["To"]       = EMAIL_TO
         msg.attach(MIMEText(plain, "plain"))
         msg.attach(MIMEText(html,  "html"))
@@ -405,33 +423,39 @@ def send_email(subject: str, html: str, plain: str) -> bool:
 
 @app.post("/api/contact", tags=["Contact"])
 def submit_contact(form: ContactForm):
+    from html import escape as e
+    rows = "".join(
+        f"<tr><td style='padding:10px 0;color:#888;width:130px;'>{label}</td>"
+        f"<td style='color:#fff;'>{e(val)}</td></tr>"
+        for label, val in [("Phone", form.phone), ("Company", form.company), ("Service", form.service)] if val
+    )
     html = f"""
     <div style="font-family:Arial,sans-serif;max-width:620px;margin:0 auto;background:#0c0c0c;color:#e0e0e0;border-radius:12px;overflow:hidden;">
       <div style="background:#F5A623;padding:24px 32px;">
         <h2 style="margin:0;color:#000;">📬 New Contact Form Submission</h2>
-        <p style="margin:4px 0 0;color:#111;font-size:0.85rem;">Next Tech Solutions</p>
+        <p style="margin:4px 0 0;color:#111;font-size:0.85rem;">Axon Forge</p>
       </div>
       <div style="padding:32px;">
         <table style="width:100%;border-collapse:collapse;">
-          <tr><td style="padding:10px 0;color:#888;width:130px;">Name</td><td style="color:#fff;font-weight:600;">{form.name}</td></tr>
-          <tr><td style="padding:10px 0;color:#888;">Email</td><td><a href="mailto:{form.email}" style="color:#F5A623;">{form.email}</a></td></tr>
-          {"<tr><td style='padding:10px 0;color:#888;'>Phone</td><td style='color:#fff;'>"       + form.phone   + "</td></tr>" if form.phone   else ""}
-          {"<tr><td style='padding:10px 0;color:#888;'>Company</td><td style='color:#fff;'>"    + form.company + "</td></tr>" if form.company else ""}
-          {"<tr><td style='padding:10px 0;color:#888;'>Service</td><td style='color:#F5A623;'>" + form.service + "</td></tr>" if form.service else ""}
-          <tr><td style="padding:10px 0;color:#888;">Subject</td><td style="color:#fff;">{form.subject or "—"}</td></tr>
+          <tr><td style="padding:10px 0;color:#888;width:130px;">Name</td><td style="color:#fff;font-weight:600;">{e(form.name)}</td></tr>
+          <tr><td style="padding:10px 0;color:#888;">Email</td><td><a href="mailto:{e(form.email)}" style="color:#F5A623;">{e(form.email)}</a></td></tr>
+          {rows}
+          <tr><td style="padding:10px 0;color:#888;">Subject</td><td style="color:#fff;">{e(form.subject or "—")}</td></tr>
         </table>
         <div style="margin-top:24px;padding:20px;background:#1a1a1a;border-left:3px solid #F5A623;border-radius:8px;">
           <p style="margin:0 0 8px;color:#888;font-size:0.8rem;text-transform:uppercase;">Message</p>
-          <p style="margin:0;color:#ddd;line-height:1.7;white-space:pre-wrap;">{form.message}</p>
+          <p style="margin:0;color:#ddd;line-height:1.7;white-space:pre-wrap;">{e(form.message)}</p>
         </div>
         <div style="margin-top:28px;text-align:center;">
-          <a href="mailto:{form.email}" style="background:#F5A623;color:#000;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;">Reply to {form.name} →</a>
+          <a href="mailto:{e(form.email)}" style="background:#F5A623;color:#000;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;">Reply to {e(form.name)} →</a>
         </div>
       </div>
-      <div style="padding:16px;background:#080808;text-align:center;color:#444;font-size:0.75rem;">Next Tech Solutions · Lahore, Pakistan</div>
+      <div style="padding:16px;background:#080808;text-align:center;color:#444;font-size:0.75rem;">Axon Forge</div>
     </div>"""
-    plain = f"Name: {form.name}\nEmail: {form.email}\nPhone: {form.phone or '—'}\nCompany: {form.company or '—'}\nService: {form.service or '—'}\nSubject: {form.subject or '—'}\n\nMessage:\n{form.message}"
-    send_email(f"[Next Tech] New message from {form.name} — {form.subject or 'Contact Form'}", html, plain)
+    plain = (f"Name: {form.name}\nEmail: {form.email}\nPhone: {form.phone or '—'}\n"
+             f"Company: {form.company or '—'}\nService: {form.service or '—'}\n"
+             f"Subject: {form.subject or '—'}\n\nMessage:\n{form.message}")
+    send_email(f"[Axon Forge] New message from {form.name} — {form.subject or 'Contact Form'}", html, plain)
     return {"success": True, "message": f"Thanks {form.name}! We'll get back to you within 24 hours."}
 
 

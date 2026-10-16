@@ -1,0 +1,91 @@
+/* src/components/ServicesMegaMenu.css */
+.smm { display: inline-flex; align-items: center; }
+
+.smm .smm-trigger { display: inline-flex; align-items: center; gap: 4px; text-decoration: none; color: inherit; cursor: pointer; }
+.smm-trigger.is-open { color: var(--blue, #2e9bd6); }
+.smm-chev { transition: transform 0.25s ease; }
+.smm-chev.is-open { transform: rotate(180deg); }
+
+/* Panel anchors to the bottom of the fixed navbar, centred */
+.smm-panel {
+  position: absolute; top: 100%; left: 50%;
+  width: min(900px, 96vw);
+  max-height: calc(100vh - 100px); overflow-y: auto;
+  background: var(--surface, #fff);
+  border: 1px solid var(--line, #dbe9f5);
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(11, 18, 32, 0.16);
+  z-index: 60;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transform: translate(-50%, -8px);
+  transition: opacity 0.2s ease, transform 0.25s ease, visibility 0s linear 0.25s;
+}
+.smm-panel.is-open {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transform: translate(-50%, 0);
+  transition: opacity 0.2s ease, transform 0.25s ease, visibility 0s;
+}
+/* invisible bridge so the cursor doesn't fall off between trigger and panel */
+.smm-panel::before { content: ''; position: absolute; left: 0; right: 0; top: -12px; height: 12px; }
+
+.smm-inner { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.smm-col { padding: 22px 20px 18px; }
+.smm-col + .smm-col { border-left: 1px solid var(--line, #dbe9f5); }
+.smm-col ul { list-style: none; margin: 0; padding: 0; }
+
+.smm-col-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.smm-col-icon {
+  width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+  display: grid; place-items: center;
+  color: var(--c);
+  background: color-mix(in srgb, var(--c) 14%, transparent);
+}
+.smm-col-title {
+  font-family: var(--font-display, 'Syne', sans-serif);
+  font-size: 1rem; font-weight: 800; letter-spacing: 0.02em;
+  color: var(--ink, #0b1220);
+}
+
+.smm-link {
+  display: block; padding: 7px 10px; border-radius: 8px;
+  font-size: 0.88rem; font-weight: 500; line-height: 1.35;
+  color: var(--text, #4a5568); text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.smm-link:hover, .smm-link:focus-visible {
+  background: var(--bg-soft, #f2f8fd);
+  color: var(--ink, #0b1220);
+  border-left-color: var(--c);
+  outline: none;
+}
+
+.smm-foot {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 12px 22px;
+  background: var(--bg-soft, #f2f8fd);
+  border-top: 1px solid var(--line, #dbe9f5);
+  border-radius: 0 0 16px 16px;
+  font-size: 0.82rem; color: var(--muted, #7b8494);
+}
+.smm-all { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; font-size: 0.85rem; color: var(--blue, #2e9bd6); text-decoration: none; }
+.smm-all:hover { text-decoration: underline; }
+
+/* ── Mobile accordion ── */
+.smm-m .smm-m-trigger {
+  display: flex; width: 100%; align-items: center; justify-content: space-between;
+  background: none; border: 0; border-bottom: 1px solid var(--line, #dbe9f5);
+  padding: 13px 8px; text-align: left; cursor: pointer;
+}
+.smm-m-body { padding: 6px 0 4px 12px; border-left: 2px solid var(--line, #dbe9f5); margin-top: 8px; }
+.smm-m-head { margin: 10px 12px 4px; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--c); }
+.smm-m-list { list-style: none; margin: 0; padding: 0; }
+.smm-m-list a { display: block; padding: 8px 12px; text-decoration: none; color: inherit; font-size: 0.95rem; }
+.smm-m-all { display: block; padding: 10px 12px; color: var(--blue, #2e9bd6) !important; font-weight: 700; text-decoration: none; }
+
+/* Panel is desktop-only; navbar switches to mobile menu at 1100px */
+@media (max-width: 1100px) { .smm-panel { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .smm-panel, .smm-panel.is-open, .smm-chev, .smm-link { transition: none; }
+}

@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import ServicesSection from '../components/ServicesSection'
+import ServicesCatalog from '../components/ServicesCatalog'
+import ServicesMore from '../components/ServicesMore'
+import Testimonials from './Testimonials'
 import styles from './Services.module.css'
 
 export default function Services() {
@@ -32,6 +35,9 @@ export default function Services() {
           </div>
         </div>
       </section>
+
+      {/* ── Service categories (linked from the mega menu) ── */}
+      <ServicesCatalog />
 
       {/* ── Services (sticky stacked cards) ── */}
       <ServicesSection />
@@ -79,6 +85,12 @@ export default function Services() {
           </div>
         </div>
       </section>
+
+      {/* ── Better together · Stats · Global delivery · Free quote ── */}
+      <ServicesMore />
+
+      {/* ── Existing Testimonials page, shown at the end of Services ── */}
+      <Testimonials embedded />
     </div>
   )
 }

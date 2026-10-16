@@ -3,6 +3,7 @@ import { NavLink, Link, useLocation } from 'react-router-dom'
 import { Menu, X, ArrowRight } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
 import PortfolioMegaMenu from './PortfolioMegaMenu'
+import ServicesMegaMenu from './ServicesMegaMenu'
 import styles from './Navbar.module.css'
 
 const NAV_LINKS = [
@@ -34,6 +35,7 @@ export default function Navbar({ theme, onToggleTheme }) {
   const [open, setOpen]         = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const { pathname } = useLocation()
+  const servicesActive = pathname.startsWith('/services')
   const portfolioActive = pathname.startsWith('/portfolio') || pathname.startsWith('/work')
 
   useEffect(() => {
@@ -60,6 +62,10 @@ export default function Navbar({ theme, onToggleTheme }) {
               {to === '/portfolio' ? (
                 <PortfolioMegaMenu
                   className={`${styles.link} ${portfolioActive ? styles.active : ''}`}
+                />
+              ) : to === '/services' ? (
+                <ServicesMegaMenu
+                  className={`${styles.link} ${servicesActive ? styles.active : ''}`}
                 />
               ) : (
               <NavLink
@@ -99,6 +105,13 @@ export default function Navbar({ theme, onToggleTheme }) {
               key={to}
               mobile
               className={`${styles.mobileLink} ${portfolioActive ? styles.mobileLinkActive : ''}`}
+              onNavigate={() => setOpen(false)}
+            />
+          ) : to === '/services' ? (
+            <ServicesMegaMenu
+              key={to}
+              mobile
+              className={`${styles.mobileLink} ${servicesActive ? styles.mobileLinkActive : ''}`}
               onNavigate={() => setOpen(false)}
             />
           ) : (
