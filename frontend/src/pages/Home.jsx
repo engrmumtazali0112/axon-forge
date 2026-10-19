@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Code2, TrendingUp, Users, Briefcase, Star, Target, BarChart3, Rocket, Wrench, Plus, X } from 'lucide-react'
 import { getServices, getStats, getTestimonials } from '../api'
+import ServicesSection from '../components/ServicesSection'
 import styles from './Home.module.css'
 
 const BLUE = '#5BB8E8'
@@ -151,7 +152,7 @@ export default function Home() {
   const [testimonials, setTestimonials] = useState([])
 
   useEffect(() => {
-    getServices().then(r => setServices(r.data.services.slice(0, 6)))
+    getServices().then(r => setServices(r.data.services))
     getStats().then(r => setStats(r.data))
     getTestimonials().then(r => setTestimonials(r.data.testimonials.slice(0, 3)))
   }, [])
@@ -270,39 +271,7 @@ export default function Home() {
       )}
 
       {/* ── Services ── */}
-      <section className="section">
-        <div className="container">
-          <div className={styles.sectionHead}>
-            <div>
-              <div className={styles.secLabel}>What We Do</div>
-              <h2 className={styles.secTitle}>Services We Provide</h2>
-              <p className={styles.secSub}>End-to-end development solutions tailored for startups and growing businesses.</p>
-            </div>
-            <Link to="/services" className={styles.btnGhost}>All Services →</Link>
-          </div>
-          <div className={styles.srvGrid}>
-            {services.map((s, i) => (
-              <div key={s.id} className={styles.srvCard} style={{ animationDelay: `${i * 0.08}s` }}>
-                {s.photo_url ? (
-                  <div className={styles.srvImgWrap}>
-                    <img src={s.photo_url} alt={s.title} className={styles.srvImg} />
-                    <div className={styles.srvImgOverlay} />
-                  </div>
-                ) : (
-                  <div className={styles.srvPlaceholder}>
-                    <span className={styles.srvPlaceholderNum}>{String(i + 1).padStart(2, '0')}</span>
-                  </div>
-                )}
-                <h3 className={styles.srvTitle}>{s.title}</h3>
-                <p className={styles.srvDesc}>{s.description}</p>
-                <Link to="/contact" className={styles.srvCta}>
-                  Get Started <ArrowRight size={13} />
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ServicesSection />
 
       {/* ── Automate ── */}
       <section className={styles.automate}>
