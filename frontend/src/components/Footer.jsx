@@ -1,22 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Linkedin, Twitter, Mail, MapPin, Clock, DollarSign } from 'lucide-react'
 import styles from './Footer.module.css'
-
-const BLUE = '#2E9BD6'
-const GOLD = '#F5A623'
-
-function LogoMark() {
-  return (
-    <svg width="44" height="30" viewBox="0 0 44 30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Axon Forge icon">
-      <path d="M2,26 C10,22 22,10 40,5"    stroke={GOLD} strokeWidth="2.6" strokeLinecap="round" />
-      <circle cx="40" cy="5" r="2.2" fill={GOLD} />
-      <path d="M2,28 C10,25 22,16 39,12"   stroke={BLUE} strokeWidth="2.6" strokeLinecap="round" />
-      <circle cx="39" cy="12" r="2.2" fill={BLUE} />
-      <path d="M2,29.5 C10,28 22,22 38,19" stroke={GOLD} strokeWidth="2.6" strokeLinecap="round" />
-      <circle cx="38" cy="19" r="2.2" fill={GOLD} />
-    </svg>
-  )
-}
+import logo from '../assets/logo.jpg'
 
 const NAV = [
   ['/', 'Home'], ['/about', 'About us'], ['/services', 'Services'],
@@ -34,12 +19,8 @@ export default function Footer() {
         <div className={styles.grid}>
 
           <div className={styles.brand}>
-            <Link to="/" className={styles.logo}>
-              <LogoMark />
-              <span className={styles.logoText}>
-                <span style={{ color: BLUE }}>AXON</span>{' '}
-                <span style={{ color: GOLD }}>FORGE</span>
-              </span>
+            <Link to="/" className={styles.logo} aria-label="Axon Forge home">
+              <img src={logo} alt="Axon Forge" className={styles.logoImg} />
             </Link>
             <p className={styles.tagline}>
               Building intelligent, scalable full-stack solutions. From AI integrations

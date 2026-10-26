@@ -16,7 +16,18 @@
 /* Brand */
 .brand { display: flex; flex-direction: column; gap: 20px; }
 .logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; width: fit-content; }
-.logoText { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; letter-spacing: 0.01em; }
+/* Logo image: the JPG has no transparency, so in dark mode it sits on a white rounded plate. */
+.logoImg {
+  display: block;
+  height: 44px; width: auto; max-width: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+[data-theme="dark"] .logoImg {
+  background: #fff;
+  padding: 3px 6px;
+  box-sizing: content-box;
+}
 .tagline {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.92rem; line-height: 1.75;
@@ -103,8 +114,7 @@
   .brand { grid-column: span 2; gap: 12px; }
   .contact { grid-column: span 2; }
 
-  .logo svg { width: 34px; height: auto; }
-  .logoText { font-size: 0.95rem; }
+  .logoImg { height: 36px; }
   .tagline { font-size: 0.84rem; line-height: 1.6; max-width: none; }
   .socials { gap: 8px; }
   .socialBtn { width: 34px; height: 34px; }

@@ -5,6 +5,7 @@ import ThemeToggle from './ThemeToggle'
 import PortfolioMegaMenu from './PortfolioMegaMenu'
 import ServicesMegaMenu from './ServicesMegaMenu'
 import styles from './Navbar.module.css'
+import logo from '../assets/logo.jpg'
 
 const NAV_LINKS = [
   { to: '/services',     label: 'Services'     },
@@ -14,22 +15,6 @@ const NAV_LINKS = [
   { to: '/blog',         label: 'Blog'         },
   { to: '/testimonials', label: 'Testimonials' },
 ]
-
-const BLUE = '#2E9BD6'
-const GOLD = '#F5A623'
-
-function LogoMark() {
-  return (
-    <svg width="44" height="30" viewBox="0 0 44 30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Axon Forge icon">
-      <path d="M2,26 C10,22 22,10 40,5"      stroke={GOLD} strokeWidth="2.6" strokeLinecap="round" />
-      <circle cx="40" cy="5" r="2.2" fill={GOLD} />
-      <path d="M2,28 C10,25 22,16 39,12"     stroke={BLUE} strokeWidth="2.6" strokeLinecap="round" />
-      <circle cx="39" cy="12" r="2.2" fill={BLUE} />
-      <path d="M2,29.5 C10,28 22,22 38,19"   stroke={GOLD} strokeWidth="2.6" strokeLinecap="round" />
-      <circle cx="38" cy="19" r="2.2" fill={GOLD} />
-    </svg>
-  )
-}
 
 export default function Navbar({ theme, onToggleTheme }) {
   const [open, setOpen]         = useState(false)
@@ -48,12 +33,8 @@ export default function Navbar({ theme, onToggleTheme }) {
   return (
     <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
       <div className={`container ${styles.inner}`}>
-        <Link to="/" className={styles.logo} onClick={() => setOpen(false)}>
-          <LogoMark />
-          <span className={styles.logoText}>
-            <span style={{ color: BLUE }}>AXON</span>{' '}
-            <span style={{ color: GOLD }}>FORGE</span>
-          </span>
+        <Link to="/" className={styles.logo} aria-label="Axon Forge home" onClick={() => setOpen(false)}>
+          <img src={logo} alt="Axon Forge" className={styles.logoImg} />
         </Link>
 
         <ul className={styles.links}>

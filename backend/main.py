@@ -5,6 +5,7 @@ Axon Forge — FastAPI Backend (PostgreSQL / Neon)
 • GET  /api/services             — reads from DB
 • Images saved to media/uploads/services/ and served at /media/...
 • Contact form sends a real Gmail email
+• POST /api/v1/agent/chat       — 24/7 AI customer-service agent (OpenAI)
 • Team / Testimonials / Stats remain static data
 """
 
@@ -26,6 +27,8 @@ from PIL                      import Image as PILImage
 
 from sqlalchemy import create_engine, Column, Integer, String, Text, Boolean, DateTime
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
+
+from app.routers.ai_agent import router as ai_agent_router
 
 # ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -123,6 +126,9 @@ app.add_middleware(
 
 # Serve uploaded images at /media/...
 app.mount("/media", StaticFiles(directory="media"), name="media")
+
+# AI agent: POST /api/v1/agent/chat
+app.include_router(ai_agent_router)
 
 
 @app.on_event("startup")
