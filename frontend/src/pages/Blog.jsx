@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
-import PostCover from '../components/PostCover'
+import PostImage from '../components/PostImage'
 import { POSTS, CATEGORIES, formatDate } from '../data/blogPosts'
 import styles from './Content.module.css'
 
@@ -68,7 +68,7 @@ export default function Blog() {
 
           {featured && (
             <Link to={`/blog/${featured.slug}`} className={styles.featured}>
-              <PostCover slug={featured.slug} category={featured.category} />
+              <PostImage slug={featured.slug} category={featured.category} image={featured.image} />
               <div className={styles.featuredBody}>
                 <Meta post={featured} />
                 <h2 className={styles.cardTitle}>{featured.title}</h2>
@@ -84,7 +84,7 @@ export default function Blog() {
             <div className={styles.grid}>
               {rest.map((p) => (
                 <Link key={p.slug} to={`/blog/${p.slug}`} className={styles.card}>
-                  <PostCover slug={p.slug} category={p.category} />
+                  <PostImage slug={p.slug} category={p.category} image={p.image} />
                   <div className={styles.cardBody}>
                     <Meta post={p} />
                     <h3 className={styles.cardTitle}>{p.title}</h3>

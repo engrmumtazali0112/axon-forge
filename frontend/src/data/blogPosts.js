@@ -3,11 +3,15 @@
  * Blog content. Add a post by adding an object here (newest first).
  * `body` is an array of blocks: { h: 'heading' } | { p: 'paragraph' } | { ul: ['a','b'] }
  */
+/* Cover photos: Unsplash. Swap any id below (the part after "photo-") or paste a full URL / local import into `image`. */
+const unsplash = (id) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1200&q=80`
+
 export const CATEGORIES = ['All', 'AI & Machine Learning', 'Mobile Development', 'Fintech', 'Cloud & DevOps', 'SaaS']
 
 export const POSTS = [
   {
     slug: 'ai-readiness-assessment-25-point-checklist',
+    image: unsplash('1551288049-bebda4e38f71'),
     title: 'AI Readiness Assessment: The 25-Point Checklist We Run Before Any AI Build',
     excerpt: 'A practical checklist covering data, infrastructure, security, team skills and business fit, so you know whether an AI project will pay off before you spend on it.',
     category: 'AI & Machine Learning',
@@ -27,6 +31,7 @@ export const POSTS = [
   },
   {
     slug: 'ai-voice-agents-for-business-2026',
+    image: unsplash('1478737270239-2f02b77fc618'),
     title: 'AI Voice Agents for Business in 2026: What They Cost, Where They Work, and Where They Fail',
     excerpt: 'What an AI receptionist costs to run, the use cases that pay back quickly, and the situations where a human should still pick up the phone.',
     category: 'AI & Machine Learning',
@@ -43,6 +48,7 @@ export const POSTS = [
   },
   {
     slug: 'fintech-app-development-2026-cost-pci-dss-kyc',
+    image: unsplash('1563013544-824ae1b704d3'),
     title: 'Fintech App Development in 2026: Cost, PCI DSS, KYC, and What Regulators Expect',
     excerpt: 'Why fintech costs more than a comparable app, which features pull in which compliance obligations, and the build order that keeps you out of heavy regulation until you need it.',
     category: 'Fintech',
@@ -59,6 +65,7 @@ export const POSTS = [
   },
   {
     slug: 'openai-vs-anthropic-vs-google-which-llm',
+    image: unsplash('1677442136019-21780ecad995'),
     title: 'OpenAI vs Anthropic vs Google: Which LLM Should Your Business Build On in 2026?',
     excerpt: 'How we choose an LLM provider for client builds: quality on your task, latency, cost, data handling and the cost of switching later.',
     category: 'AI & Machine Learning',
@@ -74,6 +81,7 @@ export const POSTS = [
   },
   {
     slug: 'building-saas-mvp-in-90-days',
+    image: unsplash('1460925895917-afdab827c52f'),
     title: 'Building a SaaS MVP in 90 Days: A Realistic Plan',
     excerpt: 'What to build, what to skip, and how to organise sprints so you launch with auth, billing and a dashboard people actually use.',
     category: 'SaaS',
@@ -87,6 +95,7 @@ export const POSTS = [
   },
   {
     slug: 'docker-kubernetes-deployment-for-small-teams',
+    image: unsplash('1558494949-ef010cbdcc31'),
     title: 'Docker and Kubernetes for Small Teams: When You Need It and When You Don\'t',
     excerpt: 'A simple decision guide for containers, orchestration and managed platforms, so a small team does not take on operational work it cannot afford.',
     category: 'Cloud & DevOps',
@@ -99,6 +108,7 @@ export const POSTS = [
   },
   {
     slug: 'react-native-vs-flutter-2026',
+    image: unsplash('1512941937669-90a1b58e7e9c'),
     title: 'React Native vs Flutter in 2026: Which One for Your Mobile App?',
     excerpt: 'Team skills, performance needs, native features and hiring: the questions that actually decide between the two.',
     category: 'Mobile Development',

@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
-import PostCover from '../components/PostCover'
+import PostImage from '../components/PostImage'
 import { POSTS, formatDate } from '../data/blogPosts'
 import styles from './Content.module.css'
 
@@ -67,7 +67,7 @@ export default function BlogPost() {
             <div className={styles.grid}>
               {more.map((p) => (
                 <Link key={p.slug} to={`/blog/${p.slug}`} className={styles.card}>
-                  <PostCover slug={p.slug} category={p.category} />
+                  <PostImage slug={p.slug} category={p.category} image={p.image} />
                   <div className={styles.cardBody}>
                     <div className={styles.meta}><span>{formatDate(p.date)}</span></div>
                     <h3 className={styles.cardTitle}>{p.title}</h3>

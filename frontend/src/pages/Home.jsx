@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Code2, TrendingUp, Users, Briefcase, Star, Target, BarChart3, Rocket, Wrench, Plus, X } from 'lucide-react'
 import { getServices, getStats, getTestimonials } from '../api'
 import ServicesSection from '../components/ServicesSection'
+import ExpertiseSection from '../components/ExpertiseSection'
 import styles from './Home.module.css'
 
 const BLUE = '#5BB8E8'
@@ -272,6 +273,9 @@ export default function Home() {
 
       {/* ── Services ── */}
       <ServicesSection />
+
+      {/* ── Expertise ── */}
+      <ExpertiseSection />
 
       {/* ── Automate ── */}
       <section className={styles.automate}>
