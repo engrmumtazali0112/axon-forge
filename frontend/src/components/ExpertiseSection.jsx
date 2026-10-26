@@ -43,13 +43,13 @@ const AREAS = [
   },
 ]
 
-export default function ExpertiseSection() {
+export default function ExpertiseSection({ eyebrow = 'Expertise', soft = false }) {
   return (
-    <section id="expertise" className="exp-sec" aria-labelledby="exp-title">
+    <section id="expertise" className={`exp-sec ${soft ? 'exp-sec--soft' : ''}`} aria-labelledby="exp-title">
       <div className="container">
         <div className="exp-head">
           <div className="exp-head-text">
-            <p className="exp-eyebrow">Expertise</p>
+            <p className="exp-eyebrow">{eyebrow}</p>
             <h2 id="exp-title" className="exp-title">
               Every layer of the product, <span className="exp-gold">one team</span>
             </h2>

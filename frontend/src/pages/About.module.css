@@ -104,7 +104,7 @@
 .principle:last-child { border-bottom: 0; }
 
 /* ── Vision ── */
-.vision { position: relative; overflow: hidden; background: var(--ink, #0b1220); padding: 104px 0; }
+.vision { position: relative; overflow: hidden; background: linear-gradient(135deg, #0b1220 0%, #12233d 100%); padding: 104px 0; }
 .arcs { position: absolute; right: -2%; top: 50%; transform: translateY(-50%); width: min(70vw, 760px); opacity: 0.4; pointer-events: none; }
 .visionInner { position: relative; max-width: 720px; }
 .visionTitle {
@@ -197,6 +197,35 @@
 .ctaBtn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(11,18,32,0.25); }
 
 /* ── Responsive ── */
+/* Night view
+   In dark mode --ink becomes near-white, so anything that used it as a background
+   (or as text on a gold button) turned light-on-light. The global
+   `[data-theme="dark"] section` rule also flattened the vision band into the page.
+   These rules give those pieces explicit, high-contrast colours. */
+[data-theme="dark"] .vision {
+  background:
+    radial-gradient(60% 80% at 85% 50%, rgba(245, 166, 35, 0.1), transparent 60%),
+    linear-gradient(135deg, #0e1628 0%, #13213a 100%);
+  border-top: 1px solid var(--line, #262f45);
+  border-bottom: 1px solid var(--line, #262f45);
+}
+[data-theme="dark"] .arcs { opacity: 0.55; }
+[data-theme="dark"] .eyebrowLight { color: #f5a623; }
+[data-theme="dark"] .visionTitle { color: #ffffff; }
+[data-theme="dark"] .visionText { color: #cbd5e1; }
+[data-theme="dark"] .tags li { color: #f1f5f9; background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.3); }
+
+[data-theme="dark"] .photo { background: var(--bg-soft); }
+[data-theme="dark"] .photo figcaption { background: rgba(11, 18, 32, 0.82); color: #f1f5f9; }
+[data-theme="dark"] .photoFallback { background: linear-gradient(135deg, var(--bg-soft), var(--bg-muted)); color: var(--text-soft, #64748b); }
+[data-theme="dark"] .valueNo { color: var(--text-soft, #64748b); }
+[data-theme="dark"] .skills li { color: var(--accent, #5bb8e8); }
+[data-theme="dark"] .newsletter { border-color: rgba(91, 184, 232, 0.3); }
+[data-theme="dark"] .subBtn { color: #0b1220; }
+[data-theme="dark"] .subErr { color: #ff8a8d; }
+[data-theme="dark"] .ctaBtn { color: #0b1220; background: var(--gold, #f5a623); }
+[data-theme="dark"] .ctaBtn:hover { box-shadow: 0 10px 24px rgba(245, 166, 35, 0.3); }
+
 @media (max-width: 1000px) {
   .heroGrid, .split, .newsletter { grid-template-columns: 1fr; gap: 40px; }
   .split .sectionHead { position: static; }

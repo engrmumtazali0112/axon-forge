@@ -6,6 +6,7 @@ import {
   Image as ImageIcon, Send, Check,
 } from 'lucide-react'
 import { getTeam } from '../api'
+import Testimonials from './Testimonials'
 import styles from './About.module.css'
 
 const BLUE = '#2E9BD6'
@@ -345,6 +346,9 @@ export default function About() {
           </p>
         </div>
       </section>
+
+      {/* Testimonials (same component as the Testimonials page, without the industries + CTA blocks) */}
+      <Testimonials embedded compact />
 
       {/* Newsletter */}
       <section className={styles.section}>

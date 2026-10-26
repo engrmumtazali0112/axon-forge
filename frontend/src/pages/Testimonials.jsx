@@ -42,7 +42,7 @@ const initials = (name = '') => name.split(' ').map((n) => n[0]).join('').slice(
 
 /* `embedded` = rendered at the bottom of another page (e.g. Services):
    no breadcrumb, heading is an h2, and the page-level extras (process block + blog posts) are skipped. */
-export default function Testimonials({ embedded = false }) {
+export default function Testimonials({ embedded = false, compact = false }) {
   const Wrap = embedded ? 'div' : 'main'
   const Heading = embedded ? 'h2' : 'h1'
   const [items, setItems]     = useState([])
@@ -225,7 +225,8 @@ export default function Testimonials({ embedded = false }) {
         </div>
       </section>
 
-      {/* Industries */}
+      {/* Industries + CTA (hidden in `compact` mode, e.g. on the About page) */}
+      {!compact && (<>
       <section className="tm-industries">
         <div className="container">
           <p className="tm-ilabel">Clients we&apos;ve worked with across industries</p>
@@ -247,6 +248,7 @@ export default function Testimonials({ embedded = false }) {
           </div>
         </div>
       </section>
+      </>)}
 
       {/* Process · commitments · stack · engagement models */}
       {!embedded && <WorkSections />}

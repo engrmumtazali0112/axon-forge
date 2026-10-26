@@ -7,6 +7,13 @@
   padding: 80px 0 90px;
 }
 
+/* Soft variant (used on Portfolio, where neighbouring sections are transparent) */
+.exp-sec--soft {
+  background: var(--bg-soft, #f2f8fd);
+  border-top: 1px solid var(--line, #dbe9f5);
+  border-bottom: 1px solid var(--line, #dbe9f5);
+}
+
 /* ---------- Header ---------- */
 .exp-head {
   display: flex;
@@ -208,6 +215,7 @@
 
 /* ---------- Night view ---------- */
 [data-theme="dark"] .exp-sec { background: var(--bg); }
+[data-theme="dark"] .exp-sec--soft { background: var(--bg-soft); }
 [data-theme="dark"] .exp-icon { color: var(--accent, #5bb8e8); }
 [data-theme="dark"] .exp-item:hover { box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45); }
 [data-theme="dark"] .exp-link:hover,

@@ -1,8 +1,34 @@
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
+import PostCover from '../components/PostCover'
 import PostImage from '../components/PostImage'
 import { POSTS, formatDate } from '../data/blogPosts'
 import styles from './Content.module.css'
+import './BlogPost.css'
+
+/* Large cover image shown under the title/meta. Falls back to the generated cover if the photo is missing or fails. */
+function PostHero({ post }) {
+  const [failed, setFailed] = useState(false)
+  if (!post.image || failed) {
+    return (
+      <div className="bp-hero is-fallback">
+        <PostCover slug={post.slug} category={post.category} />
+      </div>
+    )
+  }
+  return (
+    <figure className="bp-hero">
+      <img
+        src={post.image}
+        alt={`Cover image for ${post.title}`}
+        decoding="async"
+        onError={() => setFailed(true)}
+      />
+      <span className="bp-hero-tag">{post.category}</span>
+    </figure>
+  )
+}
 
 export default function BlogPost() {
   const { slug } = useParams()
@@ -45,6 +71,7 @@ export default function BlogPost() {
 
       <section className={styles.section}>
         <div className="container">
+          <PostHero key={post.slug} post={post} />
           <article className={styles.article}>
             <p style={{ fontSize: '1.15rem', color: 'var(--ink)' }}>{post.excerpt}</p>
             {post.body.map((b, i) =>

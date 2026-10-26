@@ -5,6 +5,7 @@ import { ArrowRight } from 'lucide-react'
 
 import ProjectCard from '../components/ProjectCard'
 import FeaturedCard from '../components/FeaturedCard'
+import ExpertiseSection from '../components/ExpertiseSection'
 import useScrollReveal from '../hooks/useScrollReveal'
 import { PROJECTS, INDUSTRIES } from '../data/projects'
 
@@ -119,6 +120,9 @@ export default function Portfolio() {
           )}
         </div>
       </section>
+
+      {/* ── Our Expertise ────────────────────────────────────── */}
+      <ExpertiseSection eyebrow="Our expertise" soft />
 
       {/* ── CTA ──────────────────────────────────────────────── */}
       <section className={styles.ctaWrap}>
