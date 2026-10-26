@@ -19,7 +19,7 @@
 /* Logo image: the JPG has no transparency, so in dark mode it sits on a white rounded plate. */
 .logoImg {
   display: block;
-  height: 44px; width: auto; max-width: 100%;
+  height: 64px; width: auto; max-width: 100%;
   object-fit: contain;
   border-radius: 8px;
 }
@@ -114,7 +114,7 @@
   .brand { grid-column: span 2; gap: 12px; }
   .contact { grid-column: span 2; }
 
-  .logoImg { height: 36px; }
+  .logoImg { height: 52px; }
   .tagline { font-size: 0.84rem; line-height: 1.6; max-width: none; }
   .socials { gap: 8px; }
   .socialBtn { width: 34px; height: 34px; }

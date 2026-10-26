@@ -9,9 +9,8 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     ENVIRONMENT: str = "development"
 
-    # MySQL Database (from your .env in the image)
-    DATABASE_URL: str = "mysql+pymysql://root:Dmuntaz12@localhost:3306/itservices_db"
-    # Note: If @ in password causes issues, use: mysql+pymysql://root:Dmuntaz12%@localhost:3306/itservices_db
+    # PostgreSQL (Neon) — set DATABASE_URL in backend/.env; no credentials live in code
+    DATABASE_URL: str = ""
 
     SECRET_KEY: str = "change-me-in-production"
     ALGORITHM: str = "HS256"

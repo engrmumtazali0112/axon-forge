@@ -6,9 +6,9 @@
 fastapi>=0.115.0
 uvicorn[standard]>=0.30.0
 
-# ── Database (MySQL) ─────────────────────────────────────────
+# ── Database (PostgreSQL / Neon) ─────────────────────────────────────────
 sqlalchemy>=2.0.36
-pymysql>=1.1.1
+psycopg[binary]>=3.2    # psycopg v3 — main.py rewrites postgresql:// to postgresql+psycopg://
 
 # ── Pydantic ─────────────────────────────────────────────────
 # pydantic v2.9+ ships cp314 wheels — no Rust compile needed
