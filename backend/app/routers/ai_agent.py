@@ -1,12 +1,13 @@
 """
 Axon Forge — AI agent router
 ============================
-POST /api/v1/agent/chat — 24/7 AI customer-service agent.
+POST /api/v1/agent/chat — 24/7 AI customer-service agent (Google Gemini).
 
 The endpoint is stateless: the client sends the conversation so far in `history`
 and gets the assistant's next reply back.
 """
 
+import logging
 import os
 import time
 from collections import defaultdict, deque
@@ -17,6 +18,7 @@ from pydantic import BaseModel, Field
 
 from app.services import ai_service
 
+logger = logging.getLogger("axon.agent")
 router = APIRouter(prefix="/api/v1/agent", tags=["AI Agent"])
 
 
@@ -39,7 +41,7 @@ class ChatResponse(BaseModel):
 
 
 # ─── Rate limiting (per IP, in memory) ────────────────────────────────────────
-# Protects your OpenAI credits. On serverless hosts (e.g. Vercel) each instance
+# Protects your Gemini API quota. On serverless hosts (e.g. Vercel) each instance
 # keeps its own counters, so treat this as a basic guard, not a hard limit.
 
 RATE_LIMIT_PER_MIN = int(os.getenv("AGENT_RATE_LIMIT_PER_MIN", "20"))
@@ -79,7 +81,8 @@ async def chat(payload: ChatRequest, request: Request):
             payload.message,
             [m.model_dump() for m in payload.history],
         )
-    except ai_service.AgentNotConfiguredError:
+    except ai_service.AgentNotConfiguredError as exc:
+        logger.error("AI agent not configured: %s", exc)   # shows the real reason in your terminal
         raise HTTPException(503, "The AI agent isn't configured yet. Please try again later.")
     except ai_service.AgentUnavailableError:
         raise HTTPException(

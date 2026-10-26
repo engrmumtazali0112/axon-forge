@@ -5,7 +5,7 @@ Axon Forge — FastAPI Backend (PostgreSQL / Neon)
 • GET  /api/services             — reads from DB
 • Images saved to media/uploads/services/ and served at /media/...
 • Contact form sends a real Gmail email
-• POST /api/v1/agent/chat       — 24/7 AI customer-service agent (OpenAI)
+• POST /api/v1/agent/chat       — 24/7 AI customer-service agent (Gemini)
 • Team / Testimonials / Stats remain static data
 """
 

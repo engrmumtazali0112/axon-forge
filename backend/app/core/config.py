@@ -27,9 +27,9 @@ class Settings(BaseSettings):
     EMAIL_FROM: str = "engrmumtazali01@gmail.com"  # Updated
     EMAIL_TO: str = "engrmumtazali01@gmail.com"  # Updated to send to yourself
 
-    # AI agent (OpenAI) — set OPENAI_API_KEY in backend/.env, never in code
-    OPENAI_API_KEY: str = ""
-    OPENAI_MODEL: str = "gpt-4o-mini"
+    # AI agent (Google Gemini) — set GEMINI_API_KEY in backend/.env, never in code
+    GEMINI_API_KEY: str = ""
+    GEMINI_MODEL: str = "gemini-2.5-flash"
     AGENT_RATE_LIMIT_PER_MIN: int = 20
 
     # File Uploads
